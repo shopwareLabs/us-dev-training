@@ -1,0 +1,14 @@
+{
+  "name": "swag-faq",
+  "version": "1.0.0",
+  "description": "FAQ module for the product detail page",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shopware AG",
+  "license": "MIT",
+  "dependencies": {
+    "@shopware-ag/meteor-admin-sdk": "^5.7.8"
+  }
+}
