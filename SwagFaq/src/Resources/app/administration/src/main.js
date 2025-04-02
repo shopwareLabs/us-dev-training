@@ -34,6 +34,7 @@ const CARD_LOCATION = 'swagfaq-product-detail-tab-faq-card';
     // Render the custom UI when the iFrame location matches your defined location
     if (sw.location.is(CARD_LOCATION)) {
         createApp(FaqDetailPage).mount('#app');
+        sw.location.startAutoResizer();
     }
 
 })();
