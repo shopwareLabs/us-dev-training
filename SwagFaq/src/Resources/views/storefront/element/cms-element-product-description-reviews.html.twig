@@ -28,17 +28,23 @@
     }
 ] %}
 
+{# The tab navigation item #}
+{% set faqTabId = 'faq-tab' %}
+
+{# The actual tab content #}
+{% set faqTabPaneId = 'faq-tab-pane' %}
+
 {% block element_product_description_reviews_tabs_navigation_review %}
     {{ parent() }}
 
     <li class="nav-item">
         <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
-           id="faq-tab"
+           id="{{ faqTabId }}"
            data-bs-toggle="tab"
            data-off-canvas-tabs="true"
-           href="#faq-tab-pane"
+           href="#{{ faqTabPaneId }}"
            role="tab"
-           aria-controls="faq-tab-pane">
+           aria-controls="{{ faqTabPaneId }}">
             {{ 'swagFaq.tabTitle'|trans|sw_sanitize }} <span class="swag-faq-tab-counter badge text-bg-primary">{{ faq|length }}</span>
             <span class="product-detail-tab-navigation-icon">
                 {% sw_icon 'arrow-medium-right' style { pack: 'solid' } %}
@@ -51,36 +57,12 @@
     {{ parent() }}
 
     <div class="tab-pane"
-         id="faq-tab-pane"
+         id="{{ faqTabPaneId }}"
          role="tabpanel"
-         aria-labelledby="faq-tab">
-
-        <h2 class="swag-faq-headline">{{ 'swagFaq.headline'|trans({ '%product_name%': product.translated.name })|sw_sanitize }}</h2>
-
-        <div class="swag-faq-accordion accordion accordion-flush" id="accordionFaq">
-            {% for faqItem in faq %}
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button fw-bold fs-5{% if not faqItem.open %} collapsed{% endif %}"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#{{ faqItem.id }}"
-                                aria-expanded="true"
-                                aria-controls="{{ faqItem.id }}">
-                            {{ faqItem.question }}
-                        </button>
-                    </h2>
-
-                    <div id="{{ faqItem.id }}"
-                         class="accordion-collapse collapse{% if faqItem.open %} show{% endif %}"
-                         data-bs-parent="#accordionFaq">
-                        <div class="accordion-body">
-                            <strong>{{ 'swagFaq.answerLabel'|trans|striptags }}:</strong>
-                            {{ faqItem.answer|raw }}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+         aria-labelledby="{{ faqTabId }}">
+        {% sw_include '@Storefront/storefront/element/cms-element-product-faq.html.twig' with {
+            productName: product.translated.name,
+            faq: faq
+        } only %}
     </div>
 {% endblock %}
