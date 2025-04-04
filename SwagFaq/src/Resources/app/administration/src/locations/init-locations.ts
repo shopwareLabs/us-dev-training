@@ -3,12 +3,22 @@ import { createI18n } from 'vue-i18n';
 import '@shopware-ag/meteor-component-library/styles.css';
 import '@shopware-ag/meteor-component-library/font.css';
 import { location } from '@shopware-ag/meteor-admin-sdk';
+import './../iframe.css';
 
 // register all components for the location
 const locations = {
     'swagfaq-product-detail-tab-faq-card': defineAsyncComponent(
         () => import('./faq-list.vue')
     ),
+    'swagfaq-element': defineAsyncComponent(
+        () => import('./faq-cms-element.vue')
+    ),
+    'swagfaq-config': defineAsyncComponent(
+        () => import('./faq-cms-config.vue')
+    ),
+    'swagfaq-preview': defineAsyncComponent(
+        () => import('./faq-cms-preview.vue')
+    )
 };
 
 const app = createApp({

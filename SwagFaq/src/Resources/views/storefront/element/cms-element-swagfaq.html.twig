@@ -12,6 +12,10 @@
     * open {boolean}
 #}
 
+{% if productName is not defined %}
+    {% set productName = page.product.translated.name %}
+{% endif %}
+
 <div class="swag-cms-element-product-faq">
     <h2 class="swag-faq-headline">{{ 'swagFaq.headline'|trans({ '%product_name%': productName })|sw_sanitize }}</h2>
 

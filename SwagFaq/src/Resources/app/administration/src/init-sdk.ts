@@ -1,4 +1,4 @@
-import { ui } from '@shopware-ag/meteor-admin-sdk';
+import { ui, cms } from '@shopware-ag/meteor-admin-sdk';
 
 /**
  * All extension points will be registered here
@@ -21,6 +21,31 @@ const CARD_LOCATION = 'swagfaq-product-detail-tab-faq-card';
             title: 'Hello from plugin',
             subtitle: 'I am before the properties card',
             locationId: CARD_LOCATION,
+        },
+    });
+
+    await cms.registerCmsElement({
+        name: 'swagfaq',
+        label: 'FAQ element',
+        defaultConfig: {
+            faqContent: {
+                source: 'static',
+                value: '',
+            },
+        },
+    });
+
+    await cms.registerCmsBlock({
+        name: 'swag-faq-block',
+        label: 'FAQ',
+        slots: [
+            { element: 'swagfaq' },
+        ],
+        // optional properties
+        category: 'commerce',
+        // previewImage: 'https://placehold.co/350x200',
+        slotLayout: {
+            grid: 'auto'
         },
     });
 })();
