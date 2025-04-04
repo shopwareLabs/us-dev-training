@@ -4,14 +4,31 @@
   "description": "FAQ module for the product detail page",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:all": "npm run lint:eslint && vue-tsc --noEmit",
+    "lint:all:fix": "npm run lint:eslint -- --fix && vue-tsc --noEmit",
+    "lint:eslint": "eslint .",
+    "lint:types": "vue-tsc --noEmit"
   },
   "author": "Shopware AG",
   "license": "MIT",
   "dependencies": {
+    "@shopware-ag/entity-schema-types": "^6.9.0",
     "@shopware-ag/meteor-admin-sdk": "^5.7.8",
     "@shopware-ag/meteor-component-library": "^4.8.0",
     "@shopware-ag/meteor-icon-kit": "^5.4.0",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.1.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-vue": "^10.0.0",
+    "prettier": "3.5.3",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.29.0",
+    "vue-tsc": "^2.2.8"
   }
 }
