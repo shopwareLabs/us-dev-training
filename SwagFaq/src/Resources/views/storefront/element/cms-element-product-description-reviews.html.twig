@@ -1,0 +1,68 @@
+{% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
+
+{# Example data #}
+{% set faq = [
+    {
+        id: 'question-1',
+        question: 'Is the car safe to use in the rain?',
+        answer: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Please visit <a href="#">support section</a> for more information.',
+        open: true,
+    },
+    {
+        id: 'question-2',
+        question: 'Can the car update itself over the air?',
+        answer: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, <i>sed diam nonumy eirmod tempor invidunt</i> ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+        open: false,
+    },
+    {
+        id: 'question-3',
+        question: 'How long is the warranty?',
+        answer: '<i>Lorem ipsum dolor sit amet</i>, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+        open: false,
+    },
+    {
+        id: 'question-4',
+        question: 'When is the first scheduled maintenance?',
+        answer: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+        open: false,
+    }
+] %}
+
+{# The tab navigation item #}
+{% set faqTabId = 'faq-tab' %}
+
+{# The actual tab content #}
+{% set faqTabPaneId = 'faq-tab-pane' %}
+
+{% block element_product_description_reviews_tabs_navigation_review %}
+    {{ parent() }}
+
+    <li class="nav-item">
+        <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
+           id="{{ faqTabId }}"
+           data-bs-toggle="tab"
+           data-off-canvas-tabs="true"
+           href="#{{ faqTabPaneId }}"
+           role="tab"
+           aria-controls="{{ faqTabPaneId }}">
+            {{ 'swagFaq.tabTitle'|trans|sw_sanitize }} <span class="swag-faq-tab-counter badge text-bg-primary">{{ faq|length }}</span>
+            <span class="product-detail-tab-navigation-icon">
+                {% sw_icon 'arrow-medium-right' style { pack: 'solid' } %}
+            </span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block element_product_description_reviews_tabs_content_review %}
+    {{ parent() }}
+
+    <div class="tab-pane"
+         id="{{ faqTabPaneId }}"
+         role="tabpanel"
+         aria-labelledby="{{ faqTabId }}">
+        {% sw_include '@Storefront/storefront/element/cms-element-swagfaq.html.twig' with {
+            productName: product.translated.name,
+            faq: faq
+        } only %}
+    </div>
+{% endblock %}

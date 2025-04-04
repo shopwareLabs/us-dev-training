@@ -1,0 +1,47 @@
+{#
+    Product FAQ CMS element
+    ========================================
+    Properties:
+    * faq - The FAQ items
+    * productName - The name of the current product
+
+    Data structure FAQ item:
+    * id: {uuid}
+    * question {string}
+    * answer {string}
+    * open {boolean}
+#}
+
+{% if productName is not defined %}
+    {% set productName = page.product.translated.name %}
+{% endif %}
+
+<div class="swag-cms-element-product-faq">
+    <h2 class="swag-faq-headline">{{ 'swagFaq.headline'|trans({ '%product_name%': productName })|sw_sanitize }}</h2>
+
+    <div class="swag-faq-accordion accordion accordion-flush" id="accordionFaq">
+        {% for faqItem in faq %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold fs-5{% if not faqItem.open %} collapsed{% endif %}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#{{ faqItem.id }}"
+                            aria-expanded="true"
+                            aria-controls="{{ faqItem.id }}">
+                        {{ faqItem.question }}
+                    </button>
+                </h2>
+
+                <div id="{{ faqItem.id }}"
+                     class="accordion-collapse collapse{% if faqItem.open %} show{% endif %}"
+                     data-bs-parent="#accordionFaq">
+                    <div class="accordion-body">
+                        <strong>{{ 'swagFaq.answerLabel'|trans|striptags }}:</strong>
+                        {{ faqItem.answer|raw }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
