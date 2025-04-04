@@ -1,31 +1,29 @@
 import { ui, cms } from '@shopware-ag/meteor-admin-sdk';
+import { LOCATION_CARD_CREATE, LOCATION_CMS_ELEMENT } from './constants';
 
 /**
  * All extension points will be registered here
  */
-
-const TAB_LOCATION = 'swagfaq-product-detail-tab-faq';
-const CARD_LOCATION = 'swagfaq-product-detail-tab-faq-card';
-
 (async () => {
+    const TAB_PRODUCT = 'swagfaq-product-detail-tab-faq';
     await ui.tabs('sw-product-detail').addTabItem({
         label: 'FAQ', // Todo: snippet
-        componentSectionId: TAB_LOCATION,
+        componentSectionId: TAB_PRODUCT,
     });
 
     await ui.componentSection.add({
         component: 'card',
-        positionId: TAB_LOCATION,
+        positionId: TAB_PRODUCT,
         props: {
             // Todo: snippets
             title: 'Hello from plugin',
             subtitle: 'I am before the properties card',
-            locationId: CARD_LOCATION,
+            locationId: LOCATION_CARD_CREATE,
         },
     });
 
     await cms.registerCmsElement({
-        name: 'swagfaq',
+        name: LOCATION_CMS_ELEMENT,
         label: 'FAQ element',
         defaultConfig: {
             faqContent: {
@@ -38,14 +36,12 @@ const CARD_LOCATION = 'swagfaq-product-detail-tab-faq-card';
     await cms.registerCmsBlock({
         name: 'swag-faq-block',
         label: 'FAQ',
-        slots: [
-            { element: 'swagfaq' },
-        ],
+        slots: [{ element: LOCATION_CMS_ELEMENT }],
         // optional properties
         category: 'commerce',
         // previewImage: 'https://placehold.co/350x200',
         slotLayout: {
-            grid: 'auto'
+            grid: 'auto',
         },
     });
 })();

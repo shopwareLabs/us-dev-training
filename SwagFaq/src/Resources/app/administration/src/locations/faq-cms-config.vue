@@ -1,11 +1,5 @@
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
+<template>FAQ Config</template>
 
-<template>
-FAQ Config
-</template>
-
-<style scoped>
-
-</style>
+<style scoped></style>
