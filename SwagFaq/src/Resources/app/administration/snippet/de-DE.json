@@ -1,0 +1,23 @@
+{
+  "swagFaq": {
+    "productTab": "FAQ",
+    "form": {
+      "title": "Erstelle Q&A",
+      "subtitle": "Füge ein Frage und Antwort-Paar zum Produkt hinzu",
+      "questionLabel": "Frage",
+      "questionPlaceholder": "Gib eine Frage ein",
+      "answerLabel": "Antwort",
+      "answerPlaceholder": "Gib die Antwort zu der Frage ein",
+      "add": "Frage hinzufügen"
+    },
+    "list": {
+      "title": "Q&A Liste",
+      "answerPrefix": "Antwort:",
+      "emptyMessage": "Dieses Produkt hat noch kein FAQ. Füge die erste Frage und Antwort hinzu"
+    },
+    "cms": {
+      "elementLabel": "FAQ-Element",
+      "blockLabel": "FAQ"
+    }
+  }
+}

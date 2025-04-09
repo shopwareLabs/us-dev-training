@@ -1,13 +1,20 @@
 import { ui, cms } from '@shopware-ag/meteor-admin-sdk';
-import { LOCATION_CARD_CREATE, LOCATION_CMS_ELEMENT } from './constants';
+import {
+    LOCATION_CARD_CREATE,
+    LOCATION_CARD_LIST,
+    LOCATION_CMS_ELEMENT,
+} from './constants';
 
 /**
  * All extension points will be registered here
  */
 (async () => {
+    /**
+     * Product detail tab
+     */
     const TAB_PRODUCT = 'swagfaq-product-detail-tab-faq';
     await ui.tabs('sw-product-detail').addTabItem({
-        label: 'FAQ', // Todo: snippet
+        label: 'swagFaq.productTab',
         componentSectionId: TAB_PRODUCT,
     });
 
@@ -15,16 +22,27 @@ import { LOCATION_CARD_CREATE, LOCATION_CMS_ELEMENT } from './constants';
         component: 'card',
         positionId: TAB_PRODUCT,
         props: {
-            // Todo: snippets
-            title: 'Hello from plugin',
-            subtitle: 'I am before the properties card',
+            title: 'swagFaq.form.title',
+            subtitle: 'swagFaq.form.subtitle',
             locationId: LOCATION_CARD_CREATE,
         },
     });
 
+    await ui.componentSection.add({
+        component: 'card',
+        positionId: TAB_PRODUCT,
+        props: {
+            title: 'swagFaq.list.title',
+            locationId: LOCATION_CARD_LIST,
+        },
+    });
+
+    /**
+     * CMS extension
+     */
     await cms.registerCmsElement({
         name: LOCATION_CMS_ELEMENT,
-        label: 'FAQ element',
+        label: 'swagFaq.cms.elementLabel',
         defaultConfig: {
             faqContent: {
                 source: 'static',
@@ -35,7 +53,7 @@ import { LOCATION_CARD_CREATE, LOCATION_CMS_ELEMENT } from './constants';
 
     await cms.registerCmsBlock({
         name: 'swag-faq-block',
-        label: 'FAQ',
+        label: 'swagFaq.cms.blockLabel',
         slots: [{ element: LOCATION_CMS_ELEMENT }],
         // optional properties
         category: 'commerce',
