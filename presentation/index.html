@@ -1,40 +1,346 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>Shopware US-Dev workshop</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    <link rel="stylesheet" href="dist/theme/black.css">
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+    <!-- Shopware theme -->
+    <style>
+        :root {
+            --r-heading-color: #0870ff;
+            --r-link-color: #0870ff;
+            --r-background-color: rgb(23, 29, 34);
+            --r-main-font: Inter, -apple-system, Arial, sans-serif;
+            --r-heading-font-weight: bold;
+            --r-heading-font: Poppins, -apple-system, Arial, sans-serif;
+            --r-heading-text-transform: none;
+        }
+
+        .reveal pre {
+            font-size: 0.5em;
+        }
+    </style>
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/themes/github-dark-dimmed.css">
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>Storefront</h1>
+        </section>
+        <section>
+            <h2>Storefront tech stack 👩‍💻</h2>
+            <ul>
+                <li>Server-side rendering</li>
+                <li>Symfony Twig</li>
+                <li>SCSS</li>
+                <li>Bootstrap 5.3</li>
+                <li>Vanilla JavaScript</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>How to extend the Storefront</h2>
+
+            <p>There are multiple entry points how to modify the Storefront</p>
+            <ul>
+                <li><strong>Plugins</strong><br>
+                    <small>Most powerful, has access to the code and PHP, only works on-prem.</small>
+                </li>
+                <li><strong>Apps</strong><br>
+                    <small>Does not have direct PHP access, works on-prem and SaaS. Template extensions also work in apps.</small>
+                </li>
+                <li><strong>Themes</strong><br>
+                    <small>A plugin or app with additional theming capabilities via theme configuration. Can be specific per sales channel.</small>
+                </li>
+            </ul>
+
+        </section>
+
+        <section>
+            <h2>What can be modified</h2>
+            <ul>
+                <li>🌱 Twig templates (HTML)</li>
+                <li>🎨 (S)CSS</li>
+                <li>⚙️ JavaScript</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Extend templates</h2>
+            <ul>
+                <li>Twig templates can be overwritten or extended.</li>
+                <li>Templates contain Twig <code>{% block %}</code> placeholders for extensions.</li>
+                <li>The template extension is referenced by file name and file path.</li>
+            </ul>
+            <img width="300" height="300" src="https://uploads.sitepoint.com/wp-content/uploads/2017/06/1498395285Twig.png">
+        </section>
+
+        <section data-auto-animate>
+            <section>
+                <h3>Extend base template</h3>
+                <p>Shopware core:</p>
+                <pre><code data-trim class="language-txt">
+                shopware-root/
+                └── 📁src
+                    └── 📁Storefront
+                        └── 📁Resources
+                            └── 📁views
+                                └── 📁storefront
+                                    ├── 📁block
+                                    ├── 📁component
+                                    ├── 📁element
+                                    ├── [...]
+                                    └── 🌱base.html.twig
+                </code></pre>
+            </section>
+
+            <section>
+                <p>Your plugin:</p>
+                <pre><code data-trim class="language-txt">
+                shopware-root/custom/plugins/
+                └── 📁SwagFaq
+                    └── 📁src
+                        └── 📁Resources
+                            └── 📁views
+                                └── 📁storefront
+                                    └── 🌱base.html.twig
+                </code></pre>
+            </section>
+        </section>
+
+        <section data-auto-animate>
+            <section>
+                <h3>Extend base template</h3>
+                <small><strong>Shopware core:</strong></small>
+                <pre><code data-trim class="language-twig" data-line-numbers="1-8|38|38-58"><script type="text/template">
+                {# src/Storefront/Resources/views/storefront/base.html.twig #}
+                {% block base_doctype %}<!DOCTYPE html>{% endblock %}
+
+                {% block base_html %}
+                <html lang="{{ context.saleschannel.languages.first.translationCode.code }}"
+                      itemscope="itemscope"
+                      itemtype="https://schema.org/WebPage">
+                {% endblock %}
+
+                {% block base_head %}
+                    {% sw_include '@Storefront/storefront/layout/meta.html.twig' %}
+                {% endblock %}
+
+                {% block base_body %}
+                    <body class="{% block base_body_classes %}is-ctl-{% if controllerName is not empty %}{{ controllerName|lower }}{% endif %} is-act-{% if controllerAction is not empty %}{{ controllerAction|lower }}{% endif %}{% endblock %}">
+
+                    {% block base_body_inner %}
+                        {% block base_header %}
+                            {% sw_include '@Storefront/storefront/utilities/staging-info.html.twig' %}
+
+                            <header class="header-main">
+                                {% block base_header_inner %}
+                                    <div class="container">
+                                        {% sw_include '@Storefront/storefront/layout/header/header.html.twig' %}
+                                    </div>
+                                {% endblock %}
+                            </header>
+                        {% endblock %}
+
+                        {% block base_navigation %}
+                            <div class="nav-main">
+                                {% block base_navigation_inner %}
+                                    {% sw_include '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
+                                {% endblock %}
+                            </div>
+                        {% endblock %}
+
+                        {% block base_main %}
+                            <main class="content-main" id="content-main">
+                                {% block base_flashbags %}
+                                    <div class="flashbags container">
+                                        {% for type, messages in app.flashes %}
+                                            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with { type: type, list: messages } %}
+                                        {% endfor %}
+                                    </div>
+                                {% endblock %}
+
+                                {% block base_main_inner %}
+                                    <div class="container">
+                                        {% block base_main_container %}
+                                            <div class="container-main">
+                                                <!-- Main content -->
+                                            </div>
+                                        {% endblock %}
+                                    </div>
+                                {% endblock %}
+                            </main>
+                        {% endblock %}
+
+                        {% block base_footer %}
+                            <footer class="footer-main">
+                                {% block base_footer_inner %}
+                                    {% sw_include '@Storefront/storefront/layout/footer/footer.html.twig' %}
+                                {% endblock %}
+                            </footer>
+                        {% endblock %}
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block base_scroll_up %}
+                        {% sw_include '@Storefront/storefront/layout/scroll-up.html.twig' %}
+                    {% endblock %}
+
+                    {% block base_cookie_permission %}
+                        {% sw_include '@Storefront/storefront/layout/cookie/cookie-permission.html.twig' %}
+                    {% endblock %}
+
+                    {% block base_pseudo_modal %}
+                        {% sw_include '@Storefront/storefront/component/pseudo-modal.html.twig' %}
+                    {% endblock %}
+
+                    {% block base_body_script %}
+                    {% endblock %}
+                    </body>
+                {% endblock %}
+                </html>
+                </script></code></pre>
+            </section>
+
+            <section>
+                <small><strong>Your plugin:</strong></small>
+                <pre><code data-trim class="language-twig" data-line-numbers="2|4-10"><script type="text/template">
+                {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
+                {% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+                {% block base_main %}
+                    <div class="container">
+                        <div class="bg-success text-white p-3 my-3 fs-3 fw-bold">
+                            I override the main base_main block
+                        </div>
+                    </div>
+                {% endblock %}
+                </script></code></pre>
+
+                <small>sw_extends enables multi inheritance</small>
+            </section>
+
+            <section>IMG</section>
+
+            <section>
+                <small><strong>Your plugin:</strong><br>SwagFaq/src/Resources/views/storefront/base.html.twig</small>
+                <pre><code data-trim class="language-twig" data-line-numbers="10"><script type="text/template">
+                {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
+                {% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+                {% block base_main %}
+                    <div class="container">
+                        <div class="bg-success text-white p-3 my-3 fs-3 fw-bold">
+                            I override the main base_main block
+                        </div>
+                    </div>
+                    {{ parent() }}
+                {% endblock %}
+                </script></code></pre>
+
+                <small>sw_extends enables multi inheritance</small>
+            </section>
+
+            <section>IMG</section>
+        </section>
+
+        <section>
+            <section>
+                <h3>Add CSS</h3>
+                <p>Your plugin:</p>
+                <pre><code data-trim data-line-numbers="5-9" class="language-txt">
+                shopware-root/custom/plugins/
+                └── 📁SwagFaq
+                    └── 📁src
+                        └── 📁Resources
+                            ├── 📁app
+                            │   └── 📁storefront
+                            │       └── 📁src
+                            │           └── 📁scss
+                            │               └── 📄base.scss
+                            └── 📁views
+                </code></pre>
+            </section>
+            <section>
+                <h3>Add CSS</h3>
+
+                <pre><code data-trim class="language-scss">
+                // SwagFaq/src/Resources/app/storefront/src/scss/base.scss
+                .footer-main {
+                    background: $primary-bg-subtle;
+                }
+                </code></pre>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h3>Add JavaScript</h3>
+
+                <pre><code data-trim data-line-numbers="5-8" class="language-txt">
+                shopware-root/custom/plugins/
+                └── 📁SwagFaq
+                    └── 📁src
+                        └── 📁Resources
+                            ├── 📁app
+                            │   └── 📁storefront
+                            │       └── 📁src
+                            │           └── 📄main.js
+                            └── 📁views
+                </code></pre>
+            </section>
+            <section>
+                <h3>Add JavaScript</h3>
+
+                <pre><code data-trim class="language-javascript">
+                // SwagFaq/src/Resources/app/src/main.js
+
+                window.PluginManager.register(
+                    'SwagFaq',
+                    () => import('src/plugin/my-plugin'),
+                    '[data-swag-fag]'
+                );
+                </code></pre>
+            </section>
+        </section>
+
+        <section>
+            <h2>Possible tasks</h2>
+            <p>Add the Bootstrap carousel?</p>
+            <p>Add the complete CMS element?</p>
+            <p>Add custom CSS to </p>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+        center: false,
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
 </html>
