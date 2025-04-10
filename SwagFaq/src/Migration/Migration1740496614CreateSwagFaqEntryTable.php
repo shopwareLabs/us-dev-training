@@ -15,18 +15,20 @@ class Migration1740496614CreateSwagFaqEntryTable extends MigrationStep
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS `swag_faq_entry` (
-    `id` BINARY(16) NOT NULL,
-    `name` VARCHAR(255) COLLATE utf8mb4_unicode_ci,
-    `description` VARCHAR(255) COLLATE utf8mb4_unicode_ci,
-    `active` TINYINT(1) COLLATE utf8mb4_unicode_ci,
-    `created_at` DATETIME(3) NOT NULL,
-    `updated_at` DATETIME(3),
-    PRIMARY KEY (`id`)
-)
-    ENGINE = InnoDB
-    DEFAULT CHARSET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
+            CREATE TABLE IF NOT EXISTS `swag_faq_entry` (
+                `id` BINARY(16) NOT NULL,
+                `product_id` BINARY(16) NOT NULL,
+                `question` VARCHAR(500) COLLATE utf8mb4_unicode_ci,
+                `answer` VARCHAR(500) COLLATE utf8mb4_unicode_ci,
+                `created_at` DATETIME(3) NOT NULL,
+                `updated_at` DATETIME(3),
+                PRIMARY KEY (`id`),
+                CONSTRAINT `fk.swag_faq_entry.product_id` FOREIGN KEY (`product_id`)
+                    REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            )
+                ENGINE = InnoDB
+                DEFAULT CHARSET = utf8mb4
+                COLLATE = utf8mb4_unicode_ci;
 SQL;
 
         $connection->executeStatement($sql);

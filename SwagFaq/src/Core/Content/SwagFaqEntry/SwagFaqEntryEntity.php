@@ -9,39 +9,39 @@ class SwagFaqEntryEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $name;
+    protected string $productId;
 
-    protected ?string $description;
+    protected string $question;
 
-    protected bool $active;
+    protected string $answer;
 
-    public function getName(): ?string
+    public function getProductId(): string
     {
-        return $this->name;
+        return $this->productId;
     }
 
-    public function setName(?string $name): void
+    public function setProductId(string $productId): void
     {
-        $this->name = $name;
+        $this->productId = $productId;
     }
 
-    public function getDescription(): ?string
+    public function getQuestion(): string
     {
-        return $this->description;
+        return $this->question;
     }
 
-    public function setDescription(?string $description): void
+    public function setQuestion(string $question): void
     {
-        $this->description = $description;
+        $this->question = $question;
     }
 
-    public function isActive(): bool
+    public function getAnswer(): string
     {
-        return $this->active;
+        return $this->answer;
     }
 
-    public function setActive(bool $active): void
+    public function setAnswer(string $answer): void
     {
-        $this->active = $active;
+        $this->answer = $answer;
     }
 }
