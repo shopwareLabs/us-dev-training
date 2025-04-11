@@ -33,7 +33,7 @@
     </style>
 
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="plugin/highlight/themes/github-dark-dimmed.css">
+    <link rel="stylesheet" href="plugin/highlight/themes/github-dark-dimmed.min.css">
 </head>
 <body>
 <div class="reveal">
@@ -89,10 +89,14 @@
             <img width="300" height="300" src="https://uploads.sitepoint.com/wp-content/uploads/2017/06/1498395285Twig.png">
         </section>
 
-        <section data-auto-animate>
+        <section>
+            <p><strong>Example</strong></p>
+            <h2>Extend the base template</h2>
+        </section>
+
+<!--        <section>-->
             <section>
-                <h3>Extend base template</h3>
-                <p>Shopware core:</p>
+                <h3>Find the core template</h3>
                 <pre><code data-trim class="language-txt">
                 shopware-root/
                 └── 📁src
@@ -104,12 +108,12 @@
                                     ├── 📁component
                                     ├── 📁element
                                     ├── [...]
-                                    └── 🌱base.html.twig
+                                    └── 🌱base.html.twig <--
                 </code></pre>
             </section>
 
             <section>
-                <p>Your plugin:</p>
+                <h3>Add your template</h3>
                 <pre><code data-trim class="language-txt">
                 shopware-root/custom/plugins/
                 └── 📁SwagFaq
@@ -117,15 +121,18 @@
                         └── 📁Resources
                             └── 📁views
                                 └── 📁storefront
-                                    └── 🌱base.html.twig
+                                    └── 🌱base.html.twig <--
                 </code></pre>
+                <ul>
+                    <li>Structure from /Resources/ needs to be the same.</li>
+                    <li>Creating the same file results in an override.</li>
+                </ul>
             </section>
-        </section>
+<!--        </section>-->
 
-        <section data-auto-animate>
+<!--        <section>-->
             <section>
-                <h3>Extend base template</h3>
-                <small><strong>Shopware core:</strong></small>
+                <h3>Find block in core template</h3>
                 <pre><code data-trim class="language-twig" data-line-numbers="1-8|38|38-58"><script type="text/template">
                 {# src/Storefront/Resources/views/storefront/base.html.twig #}
                 {% block base_doctype %}<!DOCTYPE html>{% endblock %}
@@ -217,7 +224,7 @@
             </section>
 
             <section>
-                <small><strong>Your plugin:</strong></small>
+                <h3>Extend block in your template</h3>
                 <pre><code data-trim class="language-twig" data-line-numbers="2|4-10"><script type="text/template">
                 {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
                 {% sw_extends '@Storefront/storefront/base.html.twig' %}
@@ -231,13 +238,18 @@
                 {% endblock %}
                 </script></code></pre>
 
-                <small>sw_extends enables multi inheritance</small>
+                <ul>
+                    <li>sw_extends makes all blocks of base.html.twig available.</li>
+                    <li>sw_extends enables multi-inheritance.</li>
+                </ul>
             </section>
 
-            <section>IMG</section>
+            <section>
+                <img src="img/block-override.png">
+            </section>
 
             <section>
-                <small><strong>Your plugin:</strong><br>SwagFaq/src/Resources/views/storefront/base.html.twig</small>
+                <h3>Parent call</h3>
                 <pre><code data-trim class="language-twig" data-line-numbers="10"><script type="text/template">
                 {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
                 {% sw_extends '@Storefront/storefront/base.html.twig' %}
@@ -252,16 +264,22 @@
                 {% endblock %}
                 </script></code></pre>
 
-                <small>sw_extends enables multi inheritance</small>
+                <p>The parent() call returns the HTML content of the core block.</p>
             </section>
 
-            <section>IMG</section>
-        </section>
+            <section>
+                <img src="img/parent-call.png">
+            </section>
+<!--        </section>-->
 
         <section>
+            <p><strong>Example</strong></p>
+            <h2>Add custom CSS</h2>
+        </section>
+
+<!--        <section>-->
             <section>
-                <h3>Add CSS</h3>
-                <p>Your plugin:</p>
+                <h3>Add SCSS entry file</h3>
                 <pre><code data-trim data-line-numbers="5-9" class="language-txt">
                 shopware-root/custom/plugins/
                 └── 📁SwagFaq
@@ -274,6 +292,10 @@
                             │               └── 📄base.scss
                             └── 📁views
                 </code></pre>
+                <ul>
+                    <li>CSS is written in SCSS.</li>
+                    <li>The base.scss of the plugin is automatically picked up by shopware.</li>
+                </ul>
             </section>
             <section>
                 <h3>Add CSS</h3>
@@ -284,12 +306,17 @@
                     background: $primary-bg-subtle;
                 }
                 </code></pre>
+                <ul>
+                    <li>In the base.scss you can write any CSS.</li>
+                    <li>You can strucuture your SCSS with @import files.</li>
+                    <li>You can use Bootstrap SCSS variables and mixins.</li>
+                </ul>
             </section>
-        </section>
+<!--        </section>-->
 
-        <section>
+<!--        <section>-->
             <section>
-                <h3>Add JavaScript</h3>
+                <h3>Add JS entry file</h3>
 
                 <pre><code data-trim data-line-numbers="5-8" class="language-txt">
                 shopware-root/custom/plugins/
@@ -302,6 +329,11 @@
                             │           └── 📄main.js
                             └── 📁views
                 </code></pre>
+
+                <ul>
+                    <li>The main.js is automatically picked up by shopware and creates a script tag in the template.</li>
+                    <li>JS will be bundled webpack.</li>
+                </ul>
             </section>
             <section>
                 <h3>Add JavaScript</h3>
@@ -315,8 +347,12 @@
                     '[data-swag-fag]'
                 );
                 </code></pre>
+                <ul>
+                    <li>JavaScript is written in vanilla JavaScript.</li>
+                    <li>You can use bootstrap JavaScript e.g. Events.</li>
+                </ul>
             </section>
-        </section>
+<!--        </section>-->
 
         <section>
             <h2>Possible tasks</h2>
