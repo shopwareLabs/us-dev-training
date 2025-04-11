@@ -18,4 +18,8 @@ if (location.isIframe()) {
          */
         import('./locations/init-locations');
     }
+} else {
+    /**
+     * plugin only code would go here
+     */
 }

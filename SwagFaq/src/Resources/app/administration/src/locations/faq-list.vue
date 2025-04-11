@@ -1,59 +1,42 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import type { Ref } from 'vue';
-import { MtTextField, MtButton } from '@shopware-ag/meteor-component-library';
 import faqItem from '../components/faq-item.vue';
+import { composables } from '@shopware-ag/meteor-admin-sdk';
 
 interface FaqEntry {
+    id: string;
     question: string;
     answer: string;
 }
 
-const faqList: Ref<FaqEntry[]> = ref([
+// temporary solution until backend is implemented
+// uses shared state between iframes,
+// see https://developer.shopware.com/resources/admin-extension-sdk/api-reference/composables/useSharedState.html
+const faqList = composables.useSharedState<FaqEntry[]>('faqList', [
     {
+        id: '1',
         question: 'Does this do X?',
         answer: 'Yes it does!',
     },
 ]);
-const newQuestion = ref('');
-const newAnswer = ref('');
 
-function onAddButtonClicked() {
-    faqList.value.push({
-        question: newQuestion.value,
-        answer: newAnswer.value,
-    });
-    newQuestion.value = '';
-    newAnswer.value = '';
+function onDelete(id: string) {
+    faqList.value = faqList.value.filter((entry) => entry.id !== id);
 }
 </script>
 
 <template>
-    <div class="faq-list__form">
-        <!-- Todo: Use snippets -->
-        <MtTextField
-            v-model="newQuestion"
-            label="Question"
-            placeholder="Enter a new question"
-        />
-        <MtTextField
-            v-model="newAnswer"
-            label="Answer"
-            placeholder="Enter corresponding answer"
-        />
-        <MtButton variant="primary" @click="onAddButtonClicked"> Add </MtButton>
-    </div>
-
+    <p v-if="faqList.value.length === 0">
+        {{ $t('swagFaq.list.emptyMessage') }}
+    </p>
     <faq-item
-        v-for="entry in faqList"
-        :key="entry.question"
+        v-for="entry in faqList.value"
+        v-else
+        :id="entry.id"
+        :key="entry.id"
         :question="entry.question"
         :answer="entry.answer"
+        @on-delete="onDelete"
     />
 </template>
 
-<style scoped>
-.faq-list__form {
-    margin-bottom: 16px;
-}
-</style>
+<style scoped></style>
