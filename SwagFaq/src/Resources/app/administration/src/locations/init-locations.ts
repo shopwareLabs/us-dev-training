@@ -9,8 +9,8 @@ import {
     LOCATION_CARD_LIST,
     LOCATION_CMS_ELEMENT,
 } from '../constants';
-import enGB from '../../snippet/en-GB.json';
-import deDE from '../../snippet/de-DE.json';
+import enGB from '../snippet/en-GB.json';
+import deDE from '../snippet/de-DE.json';
 
 (async () => {
     // register all components for the location
