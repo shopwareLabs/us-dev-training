@@ -3,6 +3,7 @@
 namespace SwagFaq\Command;
 
 use Faker\Factory;
+use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -38,6 +39,7 @@ class DemoDataCommand extends Command
             for ($i = 0; $i < rand(1, 5); $i++) {
                 $faqEntries[] = [
                     'productId' => $productId,
+                    'productVersionId' => Defaults::LIVE_VERSION,
                     'question' => ucfirst(implode(' ', $faker->words(rand(3, 8))) . '?'),
                     'answer' => $faker->paragraph(rand(1, 3)),
                 ];

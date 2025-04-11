@@ -2,46 +2,42 @@
 
 namespace SwagFaq\Core\Content\SwagFaqEntry;
 
+use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Entity as EntityAttribute;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Field;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ForeignKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\OnDelete;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ReferenceVersion;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 
+#[EntityAttribute('swag_faq_entry')]
 class SwagFaqEntryEntity extends Entity
 {
-    use EntityIdTrait;
+    #[PrimaryKey]
+    #[Field(type: FieldType::UUID, api: true)]
+    public string $id;
 
-    protected string $productId;
+    #[Required]
+    #[ForeignKey(entity: 'product', api: true)]
+    public string $productId;
 
-    protected string $question;
+    #[Required]
+    #[ReferenceVersion(entity: 'product')]
+    public string $productVersionId;
 
-    protected string $answer;
+    #[Required]
+    #[Field(type: FieldType::TEXT, api: true)]
+    public string $question;
 
-    public function getProductId(): string
-    {
-        return $this->productId;
-    }
+    #[Required]
+    #[Field(type: FieldType::TEXT, api: true)]
+    public string $answer;
 
-    public function setProductId(string $productId): void
-    {
-        $this->productId = $productId;
-    }
-
-    public function getQuestion(): string
-    {
-        return $this->question;
-    }
-
-    public function setQuestion(string $question): void
-    {
-        $this->question = $question;
-    }
-
-    public function getAnswer(): string
-    {
-        return $this->answer;
-    }
-
-    public function setAnswer(string $answer): void
-    {
-        $this->answer = $answer;
-    }
+    #[ManyToOne(entity: 'product', onDelete: OnDelete::CASCADE)]
+    public ?ProductEntity $product;
 }

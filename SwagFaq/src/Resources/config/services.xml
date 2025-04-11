@@ -27,8 +27,12 @@
             <argument type="service" id="product.repository"/>
         </service>
 
-        <service id="SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryDefinition">
-            <tag name="shopware.entity.definition" entity="swag_faq_entry" />
+        <service id="SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryEntity">
+            <tag name="shopware.entity"/>
+        </service>
+
+        <service id="SwagFaq\Extension\Content\Product\ProductExtension">
+            <tag name="shopware.entity.extension"/>
         </service>
 
     </services>

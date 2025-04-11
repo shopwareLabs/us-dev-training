@@ -18,8 +18,9 @@ class Migration1740496614CreateSwagFaqEntryTable extends MigrationStep
             CREATE TABLE IF NOT EXISTS `swag_faq_entry` (
                 `id` BINARY(16) NOT NULL,
                 `product_id` BINARY(16) NOT NULL,
-                `question` VARCHAR(500) COLLATE utf8mb4_unicode_ci,
-                `answer` VARCHAR(500) COLLATE utf8mb4_unicode_ci,
+                `product_version_id` BINARY(16) NOT NULL,
+                `question` TEXT COLLATE utf8mb4_unicode_ci,
+                `answer` TEXT COLLATE utf8mb4_unicode_ci,
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3),
                 PRIMARY KEY (`id`),
