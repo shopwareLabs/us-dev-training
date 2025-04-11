@@ -26,14 +26,14 @@
                     <button class="accordion-button fw-bold fs-5{% if not faqItem.open %} collapsed{% endif %}"
                             type="button"
                             data-bs-toggle="collapse"
-                            data-bs-target="#{{ faqItem.id }}"
+                            data-bs-target="#fag-item-{{ faqItem.id }}"
                             aria-expanded="true"
-                            aria-controls="{{ faqItem.id }}">
+                            aria-controls="fag-item-{{ faqItem.id }}">
                         {{ faqItem.question }}
                     </button>
                 </h2>
 
-                <div id="{{ faqItem.id }}"
+                <div id="fag-item-{{ faqItem.id }}"
                      class="accordion-collapse collapse{% if faqItem.open %} show{% endif %}"
                      data-bs-parent="#accordionFaq">
                     <div class="accordion-body">
