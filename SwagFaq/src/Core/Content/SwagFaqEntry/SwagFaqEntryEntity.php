@@ -2,46 +2,42 @@
 
 namespace SwagFaq\Core\Content\SwagFaqEntry;
 
+use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Entity as EntityAttribute;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Field;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ForeignKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\OnDelete;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ReferenceVersion;
+use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 
+#[EntityAttribute('swag_faq_entry')]
 class SwagFaqEntryEntity extends Entity
 {
-    use EntityIdTrait;
+    #[PrimaryKey]
+    #[Field(type: FieldType::UUID, api: true)]
+    public string $id;
 
-    protected ?string $name;
+    #[Required]
+    #[ForeignKey(entity: 'product', api: true)]
+    public string $productId;
 
-    protected ?string $description;
+    #[Required]
+    #[ReferenceVersion(entity: 'product')]
+    public string $productVersionId;
 
-    protected bool $active;
+    #[Required]
+    #[Field(type: FieldType::TEXT, api: true)]
+    public string $question;
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    #[Required]
+    #[Field(type: FieldType::TEXT, api: true)]
+    public string $answer;
 
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
-    }
+    #[ManyToOne(entity: 'product', onDelete: OnDelete::CASCADE)]
+    public ?ProductEntity $product;
 }
