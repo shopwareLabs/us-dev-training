@@ -24,8 +24,8 @@ class Migration1740496614CreateSwagFaqEntryTable extends MigrationStep
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3),
                 PRIMARY KEY (`id`),
-                CONSTRAINT `fk.swag_faq_entry.product_id` FOREIGN KEY (`product_id`)
-                    REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT `fk.swag_faq_entry.product_id` FOREIGN KEY (`product_id`, `product_version_id`)
+                    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
             )
                 ENGINE = InnoDB
                 DEFAULT CHARSET = utf8mb4
