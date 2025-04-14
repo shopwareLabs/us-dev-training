@@ -35,7 +35,7 @@
             <tag name="shopware.entity.extension"/>
         </service>
 
-        <service id="SwagFaq\Storefront\Page\Product\Subscriber\ProductPageLoadedSubscriber">
+        <service id="SwagFaq\Storefront\Page\Product\Subscriber\ProductPageCriteriaSubscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
     </services>

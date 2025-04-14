@@ -7,7 +7,7 @@ use Shopware\Core\Framework\Log\Package;
 use Shopware\Storefront\Page\Product\ProductPageCriteriaEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ProductPageLoadedSubscriber implements EventSubscriberInterface
+class ProductPageCriteriaSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {
