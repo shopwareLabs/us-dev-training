@@ -1,8 +1,5 @@
 import { ui, cms } from '@shopware-ag/meteor-admin-sdk';
-import {
-    LOCATION_CARD_LIST,
-    LOCATION_CMS_ELEMENT,
-} from './constants';
+import { LOCATION_CARD_LIST, LOCATION_CMS_ELEMENT } from './constants';
 
 /**
  * All extension points will be registered here
