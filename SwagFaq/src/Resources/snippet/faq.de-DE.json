@@ -2,6 +2,10 @@
   "swagFaq": {
     "tabTitle": "FAQ",
     "headline": "Häufig gestellte Fragen zu \"%product_name%\"",
-    "answerLabel": "Antwort"
+    "answerLabel": "Antwort",
+    "formHeadline": "Submit new question",
+    "formQuestionLabel": "Question",
+    "formAnswerLabel": "Answer",
+    "formSubmit": "Submit"
   }
 }

@@ -4,6 +4,8 @@
     Properties:
     * faq - The FAQ items
     * productName - The name of the current product
+    * productId - The ID of the current product
+    * productVersionId - The version ID of the current product
 
     Data structure FAQ item:
     * id: {uuid}
@@ -24,7 +26,7 @@
 <div class="swag-cms-element-product-faq m-1">
     <h2 class="swag-faq-headline">{{ 'swagFaq.headline'|trans({ '%product_name%': productName })|sw_sanitize }}</h2>
 
-    <div class="swag-faq-accordion accordion accordion-flush" id="accordionFaq">
+    <div class="swag-faq-accordion accordion accordion-flush mb-5" id="accordionFaq">
         {% for faqItem in faq %}
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -48,5 +50,34 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+
+    {% set pluginOptions = {
+        productId: productId,
+        productVersionId: productVersionId,
+    } %}
+
+    <div class="swag-faq-form">
+        <h2>{{ 'swagFaq.formHeadline'|trans }}</h2>
+
+        <form class="swag-faq-form" method="POST" data-faq-submit-plugin data-faq-submit-plugin-options='{{ pluginOptions|json_encode }}'>
+            <div class="form-group col-6">
+                <label for="faq-submit-question" class="form-label">
+                    {{ 'swagFaq.formQuestionLabel'|trans }}
+                </label>
+                <input type="text" name="question" id="faq-submit-question" class="form-control">
+            </div>
+
+            <div class="form-group col-6">
+                <label for="faq-submit-answer" class="form-label">
+                    {{ 'swagFaq.formAnswerLabel'|trans }}
+                </label>
+                <input type="text" name="answer" id="faq-submit-answer" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="faq-submit-button">
+                {{ 'swagFaq.formSubmit'|trans }}
+            </button>
+        </form>
     </div>
 </div>

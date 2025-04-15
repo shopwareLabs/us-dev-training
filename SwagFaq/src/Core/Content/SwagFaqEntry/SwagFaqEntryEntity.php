@@ -13,7 +13,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ReferenceVersion;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 
 #[EntityAttribute('swag_faq_entry')]
 class SwagFaqEntryEntity extends Entity
