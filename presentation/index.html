@@ -39,8 +39,118 @@
 <div class="reveal">
     <div class="slides">
         <section>
+            <h2>Agenda</h2>
+            <ul>
+                <li>Architecture overview & design principles</li>
+                <li>Building a new plugin: FAQ</li>
+                <li>How to extend shopware in different scenarios/areas</li>
+                <li>Best practice database structure
+                    <!--							<ul>-->
+                    <!--								<li>custom fields vs. entities</li>-->
+                    <!--								<li>json fields vs. TDO</li>-->
+                    <!--							</ul>-->
+                </li>
+                <li>How to extend the admin
+                    <!--							<ul>-->
+                    <!--								<li>Best practice: use extension SDK</li>-->
+                    <!--								<li>Extension SDK vs. Overrides/inheritance system</li>-->
+                    <!--							</ul>-->
+                </li>
+                <li>How to extend the Storefront
+                    <!--							<ul>-->
+                    <!--								<li>CMS element</li>-->
+                    <!--								<li>Manual override Pro/Cons</li>-->
+                    <!--								<li>Template modifications, best practices. Never use element selectors, use Bootstrap</li>-->
+                    <!--							</ul>-->
+                </li>
+
+            </ul>
+        </section>
+
+        <!-- Todo: Add introduction and refactor agenda -->
+
+        <section>
+            <h1>Administration</h1>
+        </section>
+
+        <section>
+            <h2>Administration tech stack 👨‍💻</h2>
+            <ul>
+                <li> Vue.js 3
+                    <ul>
+                        <li>still options API</li>
+                        <li>no single file components yet</li>
+                    </ul>
+                </li>
+                <li>Twig.js for template inheritance</li>
+                <li>TypeScript</li>
+                <li>SCSS</li>
+                <li>Pinia</li>
+                <li>Vue I18n</li>
+            </ul>
+        </section>
+
+        <section data-auto-animate>
+            <h2>How to extend the Administration</h2>
+            <ul>
+                <li><strong>Plugins</strong><br>
+                    <small>Most powerful, can override or extend any component.</small>
+                </li>
+                <li><strong>Apps / AdminSDK</strong><br>
+                    <small>
+                        Less powerful, but a lot more stable between shopware updates.
+                        Can't override existing components, but instead utilises specific extension points and APIs
+                        <br>
+                        <span>💡AdminSDK can also be used inside Plugins</span>
+                    </small>
+                </li>
+            </ul>
+        </section>
+
+        <section data-auto-animate>
+            <h2>How to extend the Administration</h2>
+            <ul>
+                <li><strong>Plugins</strong><br>
+                    <small>Most powerful, can override or extend any component.</small>
+                </li>
+                <li><strong>Apps / AdminSDK</strong><br>
+                    <small>
+                        Less powerful, but a lot more stable between shopware updates.
+                        Can't override existing components, but instead utilises specific extension points and APIs
+                        <br>
+                        <span style="background-color: var(--r-link-color);">💡AdminSDK can also be used inside Plugins</span>
+                    </small>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>What is the AdminSDK?</h2>
+            <ul>
+                <li>You bring your own tech stack, which is rendered in IFrames at specific extension points</li>
+                <li>The <a href="https://github.com/shopware/meteor/tree/main/packages/admin-sdk">AdminSDK</a> allows interactions with shopware</li>
+                <li>To keep the UX/UI consistent, use our <a href="https://github.com/shopware/meteor/tree/main/packages/component-library">Meteor component library</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Basic plugin structure</h2>
+            <pre><code data-trim class="language-txt">
+                WIP
+                shopware-root/custom/plugins/
+                └── 📁SwagFaq
+                    └── 📁src
+                        └── 📁Resources
+                            └── 📁views
+                                └── 📁storefront
+                                    └── 🌱base.html.twig <--
+                </code></pre>
+        </section>
+
+        <section>
             <h1>Storefront</h1>
         </section>
+
         <section>
             <h2>Storefront tech stack 👩‍💻</h2>
             <ul>
@@ -67,7 +177,6 @@
                     <small>A plugin or app with additional theming capabilities via theme configuration. Can be specific per sales channel.</small>
                 </li>
             </ul>
-
         </section>
 
         <section>
