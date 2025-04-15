@@ -8,7 +8,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Field;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ForeignKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
-use Shopware\Core\Framework\DataAbstractionLayer\Attribute\OnDelete;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\ReferenceVersion;
 use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Required;
@@ -37,6 +36,6 @@ class SwagFaqEntryEntity extends Entity
     #[Field(type: FieldType::TEXT, api: true)]
     public string $answer;
 
-    #[ManyToOne(entity: 'product', onDelete: OnDelete::CASCADE)]
+    #[ManyToOne(entity: 'product')]
     public ?ProductEntity $product;
 }
