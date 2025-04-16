@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DemoDataCommand extends Command
 {
     /**
-     * @var EntityRepository<ProductCollection> $productRepository
+     * @param EntityRepository<ProductCollection> $productRepository
      * @param EntityRepository<EntityCollection<SwagFaqEntryEntity>> $faqEntryRepository
      */
     public function __construct(
