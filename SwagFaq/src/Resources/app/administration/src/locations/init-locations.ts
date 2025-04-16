@@ -4,20 +4,13 @@ import '@shopware-ag/meteor-component-library/styles.css';
 import '@shopware-ag/meteor-component-library/font.css';
 import { location, context } from '@shopware-ag/meteor-admin-sdk';
 import './../iframe.css';
-import {
-    LOCATION_CARD_CREATE,
-    LOCATION_CARD_LIST,
-    LOCATION_CMS_ELEMENT,
-} from '../constants';
+import { LOCATION_CARD_LIST, LOCATION_CMS_ELEMENT } from '../constants';
 import enGB from '../snippet/en-GB.json';
 import deDE from '../snippet/de-DE.json';
 
 (async () => {
     // register all components for the location
     const locations = {
-        [LOCATION_CARD_CREATE]: defineAsyncComponent(
-            () => import('./faq-create-form.vue')
-        ),
         [LOCATION_CARD_LIST]: defineAsyncComponent(
             () => import('./faq-list.vue')
         ),

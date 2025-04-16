@@ -3,10 +3,13 @@
 namespace SwagFaq\Command;
 
 use Faker\Factory;
+use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryEntity;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +21,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class DemoDataCommand extends Command
 {
+    /**
+     * @var EntityRepository<ProductCollection> $productRepository
+     * @param EntityRepository<EntityCollection<SwagFaqEntryEntity>> $faqEntryRepository
+     */
     public function __construct(
         private readonly EntityRepository $productRepository,
         private readonly EntityRepository $faqEntryRepository,

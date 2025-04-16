@@ -9,21 +9,26 @@
     * id: {uuid}
     * question {string}
     * answer {string}
-    * open {boolean}
 #}
 
+{# If no "productName" is passed from the parent template, the CMS data will be used. #}
 {% if productName is not defined %}
-    {% set productName = page.product.translated.name %}
+    {% set productName = element.data.productName %}
 {% endif %}
 
-<div class="swag-cms-element-product-faq">
+{# If no "faq" is passed from the parent template, the CMS data will be used. #}
+{% if faq is not defined %}
+    {% set faq = element.data.faqEntries %}
+{% endif %}
+
+<div class="swag-cms-element-product-faq m-1">
     <h2 class="swag-faq-headline">{{ 'swagFaq.headline'|trans({ '%product_name%': productName })|sw_sanitize }}</h2>
 
     <div class="swag-faq-accordion accordion accordion-flush" id="accordionFaq">
         {% for faqItem in faq %}
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button fw-bold fs-5{% if not faqItem.open %} collapsed{% endif %}"
+                    <button class="accordion-button fw-bold fs-5 collapsed"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#fag-item-{{ faqItem.id }}"
@@ -34,7 +39,7 @@
                 </h2>
 
                 <div id="fag-item-{{ faqItem.id }}"
-                     class="accordion-collapse collapse{% if faqItem.open %} show{% endif %}"
+                     class="accordion-collapse collapse"
                      data-bs-parent="#accordionFaq">
                     <div class="accordion-body">
                         <strong>{{ 'swagFaq.answerLabel'|trans|striptags }}:</strong>

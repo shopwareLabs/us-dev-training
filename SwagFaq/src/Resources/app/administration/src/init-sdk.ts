@@ -1,9 +1,5 @@
 import { ui, cms } from '@shopware-ag/meteor-admin-sdk';
-import {
-    LOCATION_CARD_CREATE,
-    LOCATION_CARD_LIST,
-    LOCATION_CMS_ELEMENT,
-} from './constants';
+import { LOCATION_CARD_LIST, LOCATION_CMS_ELEMENT } from './constants';
 
 /**
  * All extension points will be registered here
@@ -16,16 +12,6 @@ import {
     await ui.tabs('sw-product-detail').addTabItem({
         label: 'swagFaq.productTab',
         componentSectionId: TAB_PRODUCT,
-    });
-
-    await ui.componentSection.add({
-        component: 'card',
-        positionId: TAB_PRODUCT,
-        props: {
-            title: 'swagFaq.form.title',
-            subtitle: 'swagFaq.form.subtitle',
-            locationId: LOCATION_CARD_CREATE,
-        },
     });
 
     await ui.componentSection.add({

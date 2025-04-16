@@ -2,8 +2,6 @@
   "swagFaq": {
     "productTab": "FAQ",
     "form": {
-      "title": "Erstelle Q&A",
-      "subtitle": "Füge ein Frage und Antwort-Paar zum Produkt hinzu",
       "questionLabel": "Frage",
       "questionPlaceholder": "Gib eine Frage ein",
       "answerLabel": "Antwort",
