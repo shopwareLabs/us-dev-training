@@ -1,7 +1,9 @@
 import { location } from '@shopware-ag/meteor-admin-sdk';
 
-// Only execute extensionSDK commands when
-// it is inside a iFrame (only needed for plugins)
+/**
+ * Only execute extensionSDK commands when
+ * it is inside a iFrame (only needed for plugins)
+ */
 if (location.isIframe()) {
     if (location.is(location.MAIN_HIDDEN)) {
         /**
