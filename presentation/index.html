@@ -39,6 +39,307 @@
 <div class="reveal">
     <div class="slides">
         <section>
+            <h2>General intro slides</h2>
+        </section>
+
+        <section>
+            <h2>Creating a plugin</h2>
+
+            <p>
+                For quickly getting started with building a plugin, we have an interactive scaffolding command:
+            </p>
+            <pre><code data-trim class="language_bash">
+                bin/console plugin:create
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Adding entities</h2>
+            <h3>Entities via PHP attributes</h3>
+
+            <pre><code data-trim class="language_php" data-line-numbers="0|6|9-11|13-15">
+                namespace SwagExamplePlugin\Core\Content\Example;
+
+                use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+                use Shopware\Core\Framework\DataAbstractionLayer\Attribute\Entity as EntityAttribute;
+
+                #[EntityAttribute('example_entity')]
+                class ExampleEntity extends Entity
+                {
+                    #[PrimaryKey]
+                    #[Field(type: FieldType::UUID)]
+                    public string $id;
+
+                    #[Required]
+                    #[Field(type: FieldType::STRING, api: true)]
+                    public string $name;
+                }
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Adding entities</h2>
+            <h3>Registering the entity</h3>
+
+            <pre><code data-trim class="language_xml"><script type="text/template">
+                // SwagExamplePlugin/Resources/config/services.xml
+
+                <service id="SwagExamplePlugin\Core\Content\Example\ExampleEntity">
+                    <tag name="shopware.entity"/>
+                </service>
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Database Migrations</h2>
+
+            <p>creating new migration files</p>
+            <pre><code data-trim class="language_bash">
+                bin/console database:create-migration
+            </code></pre>
+
+            <p>creating database schema based on entity classes</p>
+            <pre><code data-trim class="language_bash">
+                bin/console dal:create:schema
+            </code></pre>
+
+            <p>executing migrations</p>
+            <pre><code data-trim class="language_bash">
+                bin/console database:migrate SwagExamplePlugin --all
+            </code></pre>
+
+            <small>* migrations inside your plugin will be automatically migrated on plugin install</small>
+        </section>
+
+        <section>
+            <h2>Extending existing entities</h2>
+
+            <pre><code data-trim class="language_php" data-line-numbers="0|3|11-14|16-21">
+                // SwagExamplePlugin/src/Extension/Content/Product/CustomExtension.php
+
+                namespace SwagExamplePlugin\Extension\Content\Product;
+
+                use Shopware\Core\Content\Product\ProductDefinition;
+                use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
+                use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
+
+                class CustomExtension extends EntityExtension
+                {
+                    public function getDefinitionClass(): string
+                    {
+                        return ProductDefinition::class;
+                    }
+
+                    public function extendFields(FieldCollection $collection): void
+                    {
+                        $collection->add(
+                            new StringField('custom_string', 'customString')
+                        );
+                    }
+                }
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Extending existing entities</h2>
+            <h3>Registering the extension</h3>
+
+            <pre><code data-trim class="language_xml"><script type="text/template">
+                // SwagExamplePlugin/Resources/config/services.xml
+
+                <service id="SwagExamplePlugin\Extension\Content\Product\CustomExtension">
+                    <tag name="shopware.entity.extension"/>
+                </service>
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Validating existing entities</h2>
+
+            <p>
+                The command checks the database schema against the entity definitions.
+                It will show you if there are any inconsistencies.
+            </p>
+
+            <pre><code data-trim class="language_bash">
+                bin/console dal:validate
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Reading/writing data</h2>
+            <h3>Using the repository</h3>
+
+            <pre><code data-trim class="language_xml"><script type="text/template">
+                // SwagExamplePlugin/Resources/config/services.xml
+
+                <service id="SwagExamplePlugin\Service\ReadingData">
+                    <argument type="service" id="product.repository"/>
+                </service>
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Reading data</h2>
+
+            <pre><code data-trim class="language_php" data-line-numbers="0|10-15|17-22|24-31"><script type="text/template">
+                // SwagExamplePlugin/src/Service/ReadingData.php
+
+                namespace SwagExamplePlugin\Service;
+
+                use Shopware\Core\Content\Product\ProductCollection;
+                use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+
+                class ReadingData
+                {
+                    /**
+                     * @var EntityRepository<ProductCollection>
+                     */
+                    public function __construct(
+                        private readonly EntityRepository $productRepository
+                    ) {}
+
+                    public function readDataById(string $id, Context $context): ProductEntity
+                    {
+                        $product = $this->productRepository->search(
+                            new Criteria([$id]), $context
+                        )->first();
+                    }
+
+                    public function readData(Context $context): void
+                    {
+                        $criteria = new Criteria();
+                        $criteria->addFilter(new EqualsFilter('name', 'Example name'));
+                        $criteria->addAssociation('productReviews');
+
+                        $products = $this->productRepository->search($criteria, $context);
+                    }
+                }
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Writing data</h2>
+
+            <pre><code data-trim class="language_php" data-line-numbers="0|18-27|29-37|39-46"><script type="text/template">
+                // SwagExamplePlugin/src/Service/WritingData.php
+
+                namespace SwagExamplePlugin\Service;
+
+                use Shopware\Core\Content\Product\ProductCollection;
+                use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+
+                class WritingData
+                {
+                    /**
+                     * @var EntityRepository<ProductCollection>
+                     */
+                    public function __construct(
+                        private readonly EntityRepository $productRepository
+                    ) {
+                    }
+
+                    public function writeData(Context $context): void
+                    {
+                        $this->productRepository->create([
+                            [
+                                'name' => 'Example product',
+                                'productNumber' => 'SW123',
+                                'stock' => 10,
+                            ]
+                        ], $context);
+                    }
+
+                    public function updateData(string $id, Context $context): void
+                    {
+                        $this->productRepository->update([
+                            [
+                                'id' => $id,
+                                'name' => 'Updated product',
+                            ]
+                        ], $context);
+                    }
+
+                    public function deleteData(string $id, Context $context): void
+                    {
+                        $this->productRepository->delete([
+                            [
+                                'id' => $id,
+                            ]
+                        ], $context);
+                    }
+                }
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Add CLI Commands</h2>
+
+            <pre><code data-trim class="language_bash" data-line-numbers="0|10-13|14-22">
+                // SwagExamplePlugin/src/Command/ExampleCommand.php
+
+                namespace SwagExamplePlugin\Command;
+
+                use Symfony\Component\Console\Command\Command;
+                use Symfony\Component\Console\Input\InputInterface;
+                use Symfony\Component\Console\Output\OutputInterface;
+                use Symfony\Component\Console\Attribute\AsCommand;
+
+                #[AsCommand(
+                    name: 'swag-commands:example',
+                    description: 'Does something very special',
+                )]
+                class ExampleCommand extends Command
+                {
+                    protected function execute(InputInterface $input, OutputInterface $output): int
+                    {
+                        $output->writeln('It works!');
+
+                        return Command::SUCCESS;
+                    }
+                }
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Add CLI Commands</h2>
+            <h3>Registering the command</h3>
+
+            <pre><code data-trim class="language_xml"><script type="text/template">
+                // SwagExamplePlugin/Resources/config/services.xml
+
+                <service id="SwagExamplePlugin\Command\ExampleCommand">
+                    <tag name="console.command"/>
+                </service>
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Your first task</h2>
+            <h3>Create a demo data command</h3>
+
+            <ul>
+                <li>
+                    create 100 demo products:
+                    <pre><code data-trim class="language_bash">bin/console framework:demodata --products=100</code></pre>
+                </li>
+                <li>fetch all product IDs via the product repository</li>
+                <li>for each product ID create an FAQ entry</li>
+                <li>
+                    you can use Faker for questions/answers
+                    <pre><code data-trim class="language_php">
+                        use Faker\Factory;
+
+                        $faker = Factory::create();
+
+                        $faker->sentence(rand(3, 5)),
+                    </code></pre>
+                </li>
+
+            </ul>
+        </section>
+
+        <section>
             <h1>Storefront</h1>
         </section>
         <section>
