@@ -8,7 +8,6 @@ use Shopware\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Shopware\Core\Content\Cms\DataResolver\CriteriaCollection;
-use Shopware\Core\Content\Product\Cms\AbstractProductDetailCmsElementResolver;
 
 class FaqCmsElementDataResolver extends AbstractCmsElementResolver
 {
@@ -33,7 +32,7 @@ class FaqCmsElementDataResolver extends AbstractCmsElementResolver
 
         $product = $resolverContext->getEntity();
 
-        $faq->setFaqEntries($product->getExtensions()['swagFaqEntries']);
+        $faq->setFaqEntries($product->getExtension('swagFaqEntries'));
         $faq->setProductName($product->getName());
     }
 }
