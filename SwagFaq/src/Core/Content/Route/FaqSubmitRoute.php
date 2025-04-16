@@ -2,17 +2,22 @@
 
 namespace SwagFaq\Core\Content\Route;
 
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\StoreApiResponse;
 use Shopware\Core\System\SalesChannel\SuccessResponse;
+use SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(defaults: ['_routeScope' => ['store-api']])]
 class FaqSubmitRoute extends AbstractFaqSubmitRoute
 {
+    /**
+     * @param EntityRepository<EntityCollection<SwagFaqEntryEntity>> $faqRepository
+     */
     public function __construct(private readonly EntityRepository $faqRepository)
     {
     }
