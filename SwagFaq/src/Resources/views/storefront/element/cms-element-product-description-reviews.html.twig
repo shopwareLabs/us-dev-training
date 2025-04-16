@@ -40,6 +40,8 @@
              aria-labelledby="{{ faqTabId }}">
             {% sw_include '@Storefront/storefront/element/cms-element-swagfaq.html.twig' with {
                 productName: product.translated.name,
+                productId: product.id,
+                productVersionId: product.versionId,
                 faq: swagFaqEntries
             } only %}
         </div>
