@@ -992,7 +992,7 @@ location.startAutoResizer();
             <h3>Registering your controller</h3>
 
             <pre><code data-trim class="language-xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Storefront\Controller\ExampleController" public="true">
                     <call method="setContainer">
@@ -1010,9 +1010,8 @@ location.startAutoResizer();
             <h3>Registering the routes</h3>
 
             <pre><code data-trim class="language-xml"><script type="text/template">
-                // SwagExamplePlugin/src/Resources/config/routes.xml
+                <!-- SwagExamplePlugin/src/Resources/config/routes.xml -->
 
-                <?xml version="1.0" encoding="UTF-8" ?>
                 <routes xmlns="http://symfony.com/schema/routing"
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xsi:schemaLocation="http://symfony.com/schema/routing
@@ -1109,7 +1108,7 @@ location.startAutoResizer();
             <h3>Registering the route</h3>
 
             <pre><code data-trim class="language-xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="Swag\BasicExample\Core\Content\Example\SalesChannel\ExampleRoute">
                     <argument type="service" id="product.repository"/>
@@ -1117,7 +1116,7 @@ location.startAutoResizer();
             </script></code></pre>
 
             <pre><code data-trim class="language-xml"><script type="text/template">
-                // SwagExamplePlugin/src/Resources/config/routes.xml
+                <!-- SwagExamplePlugin/src/Resources/config/routes.xml -->
 
                 <import resource="../../Core/**/*Route.php" type="attribute" />
             </script></code></pre>
