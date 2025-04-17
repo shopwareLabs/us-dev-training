@@ -36,6 +36,14 @@
                 display: none;
             }
         }
+
+        code.inline {
+            background-color: #22272e;
+            color: #adbac7;
+            padding: 4px 8px;
+            border: 2px solid black;
+            /* todo: add some margin / prevent overlap of adjacent code blocks */
+        }
     </style>
 
     <!-- Theme used for syntax highlighted code -->
@@ -472,9 +480,9 @@
             <h2>iFrame & Location Concept</h2>
             <ul>
                 <li>Extensions run in a hidden iFrame first to register extension points</li>
-                <li>Each visible view gets a unique <code>locationId</code></li>
+                <li>Each visible view gets a unique <code class="inline">locationId</code></li>
                 <li>The height of iFrames can be automatically adjusted</li>
-                <li>iFrames provide a isolated environment for extensions. Communication happens over the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">postMessage API</a>, abstracted by the AdminSDK</li>
+                <li>iFrames provide an isolated environment for extensions. Communication happens over the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">postMessage API</a>, abstracted by the AdminSDK</li>
             </ul>
         </section>
 
@@ -533,7 +541,7 @@ if (location.isIframe()) {
 
         <section>
             <h2>Registering extension points</h2>
-            <pre><code data-trim class="language-typescript" data-line-numbers="1|8-13|15-24|22">
+            <pre><code data-trim class="language-typescript" data-line-numbers="1|8-13|10|15-24|22">
 // SwagFaq/src/Resources/app/administration/src/init-sdk.ts
 import { ui } from '@shopware-ag/meteor-admin-sdk';
 
@@ -622,13 +630,112 @@ location.startAutoResizer();
             <p>
                 Exploring extension points
             </p>
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/tooling/vue-devtools.html">Documentation</a>
+            </small>
         </section>
 
-        <!-- Todo:
-        - Explain SDK data.get
-        - Explain SDK repositories + criteria
-        - Hands on / try it yourself: Retrieve product id + version_id and fetch all related swag_faq_entries
+        <section>
+            <h2>Data API: Reading</h2>
+            <pre><code data-trim class="language-typescript" data-line-numbers="1|3-8">
+import { data } from '@shopware-ag/meteor-admin-sdk';
 
+data.get({
+    id: 'sw-product-detail__product',
+    selectors: ['name', 'manufacturer.name'],
+}).then((product) => {
+    console.log(product);
+});
+            </code></pre>
+            <pre><code data-trim class="language-json" data-line-numbers="">
+{
+  "name": "Ergonomic Copper Mr. Frenzy",
+  "manufacturer": {
+    "name": "Turcotte, Rempel and Padberg"
+  }
+}
+            </code></pre>
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/api-reference/data/get.html">Documentation</a>
+            </small>
+        </section>
+
+        <section>
+            <h2>Data API: Subscribing</h2>
+            <pre><code data-trim class="language-typescript" data-line-numbers="3-11">
+import { data } from '@shopware-ag/meteor-admin-sdk';
+
+data.subscribe(
+    'sw-product-detail__product',
+    ({id, data}) => {
+        console.log(data);
+    },
+    {
+        selectors: ['name', 'manufacturer.name']
+    },
+);
+            </code></pre>
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/api-reference/data/subscribe.html">Documentation</a>
+            </small>
+        </section>
+
+        <section>
+            <h2>Data API: Updating</h2>
+            <pre><code data-trim class="language-typescript" data-line-numbers="3-11">
+import { data } from '@shopware-ag/meteor-admin-sdk';
+
+data.update({
+    id: 'sw-product-detail__product',
+    data: {
+        name: 'My updated name',
+    },
+}).then(() => {
+    console.log('successfully updated');
+});
+            </code></pre>
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/api-reference/data/update.html">Documentation</a>
+            </small>
+        </section>
+
+        <section>
+            <h2>Data API: Repositories</h2>
+            <small>Database interactions</small>
+
+            <pre><code data-trim class="language-typescript" data-line-numbers="1-2|4|6-10|12-13">
+import { data } from '@shopware-ag/meteor-admin-sdk';
+const { Criteria } = data.Classes;
+
+const productRepository = data.repository('product');
+
+const criteria = new Criteria();
+criteria.addFilter(
+    Criteria.equals('product.active', true)
+);
+criteria.setLimit(3);
+
+const products = await productRepository.search(criteria);
+console.log(products);
+            </code></pre>
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/api-reference/data/repository.html">Documentation</a>
+            </small>
+        </section>
+
+        <section>
+            <h2>Hands on</h2>
+            <small>Try it yourself</small>
+            <ul>
+                <li>Checkout branch `task-admin`</li>
+                <li>Add tab + card to product detail page</li>
+                <li>Get the product <code class="inline">id</code> and <code class="inline">version_id</code> of the detail page</li>
+                <li>Query the <code class="inline">swag_faq_entry</code> repository</li>
+                <li>Display the questions and answers in the card</li>
+            </ul>
+        </section>
+
+        <!-- Todo Admin:
         - main branch is our finished solution
         - prepare task branch
         -->
@@ -678,7 +785,7 @@ location.startAutoResizer();
             <h2>Extend templates</h2>
             <ul>
                 <li>Twig templates can be overwritten or extended.</li>
-                <li>Templates contain Twig <code>{% block %}</code> placeholders for extensions.</li>
+                <li>Templates contain Twig <code class="inline">{% block %}</code> placeholders for extensions.</li>
                 <li>The template extension is referenced by file name and file path.</li>
             </ul>
             <img width="300" height="300" src="https://uploads.sitepoint.com/wp-content/uploads/2017/06/1498395285Twig.png">
@@ -834,8 +941,8 @@ location.startAutoResizer();
                 </script></code></pre>
 
                 <ul>
-                    <li>sw_extends makes all blocks of base.html.twig available.</li>
-                    <li>sw_extends enables multi-inheritance.</li>
+                    <li><code class="inline">sw_extends</code> makes all blocks of <code class="inline">base.html.twig</code> available.</li>
+                    <li><code class="inline">sw_extends</code> enables multi-inheritance.</li>
                 </ul>
             </section>
 
@@ -859,7 +966,7 @@ location.startAutoResizer();
                 {% endblock %}
                 </script></code></pre>
 
-                <p>The parent() call returns the HTML content of the core block.</p>
+                <p>The <code class="inline">parent()</code> call returns the HTML content of the core block.</p>
             </section>
 
             <section>
@@ -889,7 +996,7 @@ location.startAutoResizer();
                 </code></pre>
                 <ul>
                     <li>CSS is written in SCSS.</li>
-                    <li>The base.scss of the plugin is automatically picked up by shopware.</li>
+                    <li>The <code class="inline">base.scss</code> of the plugin is automatically picked up by shopware.</li>
                 </ul>
             </section>
             <section>
@@ -902,8 +1009,8 @@ location.startAutoResizer();
                 }
                 </code></pre>
                 <ul>
-                    <li>In the base.scss you can write any CSS.</li>
-                    <li>You can strucuture your SCSS with @import files.</li>
+                    <li>In the <code class="inline">base.scss</code> you can write any CSS.</li>
+                    <li>You can structure your SCSS with <code class="inline">@import</code> files.</li>
                     <li>You can use Bootstrap SCSS variables and mixins.</li>
                 </ul>
             </section>
@@ -926,7 +1033,7 @@ location.startAutoResizer();
                 </code></pre>
 
                 <ul>
-                    <li>The main.js is automatically picked up by shopware and creates a script tag in the template.</li>
+                    <li>The <code class="inline">main.js</code> is automatically picked up by shopware and creates a script tag in the template.</li>
                     <li>JS will be bundled webpack.</li>
                 </ul>
             </section>
