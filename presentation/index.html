@@ -25,6 +25,7 @@
             --r-heading-font-weight: bold;
             --r-heading-font: Poppins, -apple-system, Arial, sans-serif;
             --r-heading-text-transform: none;
+            --r-highlight-color: #adbac7;
         }
 
         .reveal pre {
@@ -36,6 +37,43 @@
                 display: none;
             }
         }
+
+        .reveal .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .reveal .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+
+            /* Nested sub-panel */
+            .panel {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .reveal .panel {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+        }
+
+        .reveal .headline-sm {
+            font-size: 0.7em;
+        }
+
+        .reveal .profile-img {
+            border-radius: 50%;
+            max-width: 70%;
+            max-height: 70%;
+        }
+
+        .reveal .small {
+            font-size: 0.6em;
+        }
     </style>
 
     <!-- Theme used for syntax highlighted code -->
@@ -45,66 +83,282 @@
 <div class="reveal">
     <div class="slides">
         <section>
-            <h2>General intro slides</h2>
+            <h1>Shopware development</h1>
+        </section>
+
+        <section>
+            <h3>Introduction</h3>
+            <div class="grid-3">
+                <div>
+                    <img src="img/malte.jpeg" class="profile-img">
+                    <h6 class="headline-sm">Malte Janz</h6>
+                    <small>Engineering Lead<br>(CRM & After Sales)</small>
+                </div>
+
+                <div>
+                    <img src="img/jozsef.jpeg" class="profile-img">
+                    <h6 class="headline-sm">Jozsef Damokos</h6>
+                    <small>Software Developer<br>(CRM & After Sales)</small>
+                </div>
+
+                <div>
+                    <img src="img/tobi.jpeg" class="profile-img">
+                    <h6 class="headline-sm">Tobias Berge</h6>
+                    <small>Software Developer<br>(Framework - Storefront)</small>
+                </div>
+            </div>
         </section>
 
         <section>
             <h2>Agenda</h2>
+            <p>What we'll do</p>
             <ul>
                 <li>Architecture overview & design principles</li>
                 <li>Building a new plugin: FAQ</li>
-                <li>How to extend shopware in different scenarios/areas</li>
-                <li>Best practice database structure
-                    <!--							<ul>-->
-                    <!--								<li>custom fields vs. entities</li>-->
-                    <!--								<li>json fields vs. TDO</li>-->
-                    <!--							</ul>-->
-                </li>
-                <li>How to extend the admin
-                    <!--							<ul>-->
-                    <!--								<li>Best practice: use extension SDK</li>-->
-                    <!--								<li>Extension SDK vs. Overrides/inheritance system</li>-->
-                    <!--							</ul>-->
-                </li>
-                <li>How to extend the Storefront
-                    <!--							<ul>-->
-                    <!--								<li>CMS element</li>-->
-                    <!--								<li>Manual override Pro/Cons</li>-->
-                    <!--								<li>Template modifications, best practices. Never use element selectors, use Bootstrap</li>-->
-                    <!--							</ul>-->
-                </li>
-
+                <li>How to extend shopware in different /areas</li>
+                <li>Best practice database structure</li>
+                <li>How to extend the admin</li>
+                <li>How to extend the Storefront</li>
             </ul>
         </section>
 
-        <!-- Todo: Add introduction + timeline and refactor agenda -->
-        <!-- Todo: Timeline idea -->
-
         <section>
             <h2>Timeline</h2>
-            <h2>Todo</h2>
             <div>
                 <ul>
                     <li>
-                        09:00 - 09:30 Introduction & Setup
+                        <strong>09 AM - Introduction & Setup</strong>
                     </li>
                     <li>
-                        09:30 - 11:30 Core (Backend) Development
+                        Core (Backend) Development
                     </li>
                     <li>
-                        11:30 - 13:00 Administration Development
+                        Administration Development
                     </li>
                     <li>
-                        13:00 - 14:00 Lunch Break
+                        <strong>1:00 PM - 2:00 PM - Lunch Break</strong>
                     </li>
                     <li>
-                        14:00 - 15:30 Administration Development (continued)
+                        Administration Development (continued)
                     </li>
                     <li>
-                        15:30 - 17:00 Storefront Development
+                        Storefront Development
+                    </li>
+                    <li>
+                        Best practices, tips, Q&A
+                    </li>
+                    <li>
+                        <strong>5:00 PM - Finish</strong>
                     </li>
                 </ul>
             </div>
+        </section>
+
+        <section>
+            <h2>Shopware overview</h2>
+            <ul>
+                <li>E-Commerce platform</li>
+                <li>Open source</li>
+                <li>Based on PHP Symfony 7</li>
+                <li>Vue 3 (Administration)</li>
+                <li>Twig, Bootstrap (Storefront)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Concepts</h2>
+
+            <div class="grid-2">
+                <div class="panel" style="background: #285d7e;">
+                    Commerce
+                    <div class="grid-2">
+                        <div class="panel small">
+                            <strong>Catalog</strong>
+                            <ul>
+                                <li>Products</li>
+                                <li>Categories</li>
+                                <li>Sales Channels</li>
+                            </ul>
+                        </div>
+                        <div class="panel small">
+                            <strong>Cart</strong>
+                            <ul>
+                                <li>Cart</li>
+                                <li>Categories</li>
+                                <li>Sales Channels</li>
+                            </ul>
+                        </div>
+                        <div class="panel small">
+                            <strong>Content</strong>
+                            <ul>
+                                <li>Shopping Experiences (CMS)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel" style="background: #936319;">
+                    Framework
+                    <div class="grid-2">
+                        <small class="panel">
+                            Data Abstraction Layer
+                        </small>
+                        <small class="panel">
+                            Messaging
+                        </small>
+                        <small class="panel">
+                            Migrations
+                        </small>
+                        <small class="panel">
+                            Rules
+                        </small>
+                        <small class="panel">
+                            HTTP Cache
+                        </small>
+                        <small class="panel">
+                            Elasticsearch
+                        </small>
+                        <small class="panel">
+                            Flow
+                        </small>
+                        <small class="panel">
+                            System Check
+                        </small>
+                    </div>
+                </div>
+                <div class="panel" style="background: #6517a6;">
+                    Extensions
+                    <div class="grid-2">
+                        <small class="panel">
+                            Apps
+                        </small>
+                        <small class="panel">
+                            Plugins
+                        </small>
+                    </div>
+                </div>
+                <div class="panel" style="background: #335933;">
+                    API
+                    <div class="grid-2">
+                        <small class="panel">
+                            Admin API
+                        </small>
+                        <small class="panel">
+                            Store API
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Repositories</h2>
+            <div class="grid-2">
+                <div class="panel" style="background: #285d7e;">
+                    shopware<br>
+                    <small>Commerce core - open source (MIT)</small>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    SwagCommercial<br>
+                    <small>Commercial features &dash; AI copilot, B2B components, spacial commerce etc.</small>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    SwagCustomizedProducts<br>
+                    <small>Commercial feature for product configurator</small>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    SwagCmsExtensions<br>
+                    <small>Commercial features for the CMS</small>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    SwagAnalytics<br>
+                    <small>Analytics features</small>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Hosting</h2>
+            <div class="grid-3">
+                <div class="panel" style="background: #22272e;">
+                    Self hosted
+                    <ul class="small">
+                        <li>Hosted on your own server</li>
+                        <li>Updates are done by you</li>
+                        <li>Extensions via plugins and apps</li>
+                        <li>Full code ownership</li>
+                    </ul>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    SaaS<br>
+                    <ul class="small">
+                        <li>Hosted by shopware</li>
+                        <li>Updates are done by shopware</li>
+                        <li>Deployments are done by shopware</li>
+                        <li>Installation done by shopware</li>
+                        <li>Extensions via apps</li>
+                    </ul>
+                </div>
+
+                <div class="panel" style="background: #22272e;">
+                    PaaS<br>
+                    <ul class="small">
+                        <li>Full code ownership like with self-hosted</li>
+                        <li>Full extensions capabilities</li>
+                        <li>Infrastructure done by shopware</li>
+                        <li>Deployments and automations done by shopware</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Extension system</h2>
+            <div class="grid-2">
+                <div class="panel" style="background: #22272e;">
+                    Apps
+                    <ul class="small">
+                        <li>Most stable</li>
+                        <li>No PHP access</li>
+                        <li>Works on-prem, PaaS and SaaS</li>
+                        <li>Does not work on-prem due to security reasons</li>
+                    </ul>
+                </div>
+                <div class="panel" style="background: #22272e;">
+                    Plugins
+                    <ul class="small">
+                        <li>Most capabilities</li>
+                        <li>Access to the code and PHP</li>
+                        <li>Works on-prem and PaaS</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Setup</h2>
+
+            <pre><code data-trim class="language_bash">
+                # Clone repository from github
+                git clone git@github.com:shopwareLabs/us-dev-training.git
+
+                # Create a symlink to your shopware plugins directory
+                ln -s /absolute/path/to/us-dev-training/SwagFaq/
+                      shopware/custom/plugins/
+
+                # Refresh installed plugins
+                bin/console plugin:refresh
+
+                # Install and activate plugin
+                bin/console plugin:install SwagFaq --activate
+
+                # Verify plugin installed and active
+                bin/console plugin:list
+            </code></pre>
         </section>
 
         <section>
@@ -642,23 +896,6 @@ location.startAutoResizer();
         </section>
 
         <section>
-            <h2>How to extend the Storefront</h2>
-
-            <p>There are multiple entry points how to modify the Storefront</p>
-            <ul>
-                <li><strong>Plugins</strong><br>
-                    <small>Most powerful, has access to the code and PHP, only works on-prem.</small>
-                </li>
-                <li><strong>Apps</strong><br>
-                    <small>Does not have direct PHP access, works on-prem and SaaS. Template extensions also work in apps.</small>
-                </li>
-                <li><strong>Themes</strong><br>
-                    <small>A plugin or app with additional theming capabilities via theme configuration. Can be specific per sales channel.</small>
-                </li>
-            </ul>
-        </section>
-
-        <section>
             <h2>What can be modified</h2>
             <ul>
                 <li>🌱 Twig templates (HTML)</li>
@@ -859,6 +1096,19 @@ location.startAutoResizer();
                 <img src="img/parent-call.png">
             </section>
 <!--        </section>-->
+
+        <section>
+            <h2>Hands on</h2>
+            <p>Try it yourself</p>
+
+            <ul>
+                <li><strong>Task:</strong> Add an extra "Tab" to the product detail page</li>
+                <li>Next to "Descriptions" and "Reviews"</li>
+                <li>Find the correct template and override it</li>
+                <li>Use template extensions to add the "Tab"</li>
+                <li>Make the "Tab" and "Tab content" work with the existing Bootstrap tab structure</li>
+            </ul>
+        </section>
 
         <section>
             <p><strong>Example</strong></p>
