@@ -26,6 +26,7 @@ import deDE from '../snippet/de-DE.json';
     };
 
     const app = createApp({
+        name: `iframe-${location.get()}`,
         // @ts-expect-error -- TS does not know about the location object
         render: () => h(locations[location.get()]),
     });
