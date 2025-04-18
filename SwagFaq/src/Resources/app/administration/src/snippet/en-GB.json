@@ -10,8 +10,12 @@
     },
     "list": {
       "title": "Q&A list",
-      "answerPrefix": "Answer:",
       "emptyMessage": "No FAQ on this product yet. Add the first question and answer above"
+    },
+    "item": {
+      "delete": "Delete",
+      "unsaved": "[Unsaved]",
+      "answerPrefix": "Answer:"
     },
     "cms": {
       "elementLabel": "FAQ element",

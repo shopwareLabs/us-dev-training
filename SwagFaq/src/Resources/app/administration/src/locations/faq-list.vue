@@ -2,11 +2,16 @@
 import faqItem from '../components/faq-item.vue';
 import { data } from '@shopware-ag/meteor-admin-sdk';
 import { computed, onMounted, ref } from 'vue';
-import { MtButton, MtTextField } from '@shopware-ag/meteor-component-library';
-import EntityCollection from '@shopware-ag/meteor-admin-sdk/es/_internals/data/EntityCollection';
+import {
+    MtButton,
+    MtTextField,
+    MtLoader,
+} from '@shopware-ag/meteor-component-library';
+import { createId } from '../utils';
 
 const { Criteria } = data.Classes;
 
+const isLoading = ref(true);
 const product = ref<EntitySchema.Entity<'product'> | null>(null);
 const faqEntryRepository = data.repository('swag_faq_entry');
 
@@ -32,8 +37,13 @@ const faqEntries = computed({
 });
 
 onMounted(async () => {
-    // Todo: on page reload when on the faq tab this is sometimes null
-    // Todo: how can we wait for it to be there?
+    // on page reload when on the faq tab the data is sometimes null
+    // Temporary fix:
+    // Wait half second to be sure that everything is loaded
+    // Better solution:
+    // Subscribe and wait until data is there
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     product.value = (await data.get({
         id: 'sw-product-detail__product',
         selectors: ['id', 'versionId', 'extensions'],
@@ -47,20 +57,29 @@ onMounted(async () => {
     );
 
     faqEntries.value = await faqEntryRepository.search(criteria);
+    isLoading.value = false;
 });
 
 async function onDelete(id: string) {
     if (!faqEntries.value) return;
+    isLoading.value = true;
 
-    // Todo: add confirm modal
+    // Note: best practice would be to show a confirmation modal first
+    // To keep it simple we skip that here
     const toDelete = faqEntries.value.find((entry) => entry.id === id);
     if (!toDelete) {
         return;
     }
-    await faqEntryRepository.delete(toDelete.id);
+
+    if (!toDelete._isNew) {
+        await faqEntryRepository.delete(toDelete.id);
+    }
+
     faqEntries.value = faqEntries.value.filter(
         (entry) => entry.id !== id
-    ) as EntityCollection<'swag_faq_entry'>;
+    ) as EntitySchema.EntityCollection<'swag_faq_entry'>;
+
+    isLoading.value = false;
 }
 
 const newQuestion = ref('');
@@ -70,12 +89,13 @@ async function onAddButtonClicked() {
     if (newEntry) {
         newEntry.question = newQuestion.value;
         newEntry.answer = newAnswer.value;
+        newEntry.id = createId();
 
         // Todo this is ugly, is there another way to trigger the setter?
         faqEntries.value = [
             ...(faqEntries.value ?? []),
             newEntry,
-        ] as EntityCollection<'swag_faq_entry'>;
+        ] as EntitySchema.EntityCollection<'swag_faq_entry'>;
         newQuestion.value = '';
         newAnswer.value = '';
     }
@@ -98,8 +118,8 @@ async function onAddButtonClicked() {
             {{ $t('swagFaq.form.add') }}
         </MtButton>
     </div>
-    <hr />
-    <p v-if="faqEntries?.length === 0">
+    <mt-loader v-if="isLoading" />
+    <p v-else-if="faqEntries?.length === 0">
         {{ $t('swagFaq.list.emptyMessage') }}
     </p>
     <faq-item
@@ -109,8 +129,13 @@ async function onAddButtonClicked() {
         :key="entry.id"
         :question="entry.question"
         :answer="entry.answer"
+        :is-new="entry._isNew ?? false"
         @on-delete="onDelete"
     />
 </template>
 
-<style scoped></style>
+<style scoped>
+.faq-list__form {
+    margin-bottom: 16px;
+}
+</style>

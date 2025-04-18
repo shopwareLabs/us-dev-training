@@ -5,8 +5,9 @@ interface Props {
     id: string;
     question: string;
     answer: string;
+    isNew?: boolean;
 }
-const { question, answer } = defineProps<Props>();
+const { id, question, answer, isNew = false } = defineProps<Props>();
 const emit = defineEmits<{
     onDelete: [id: string];
 }>();
@@ -14,18 +15,25 @@ const emit = defineEmits<{
 
 <template>
     <div class="faq-item">
-        <h2 class="question">
-            {{ question }}
-            <mt-button
-                class="delete-button"
-                variant="critical"
-                @click="emit('onDelete', id)"
-            >
-                Delete
-            </mt-button>
-        </h2>
+        <div class="question">
+            <h2>
+                {{ question }}
+            </h2>
+            <div class="actions">
+                <span v-if="isNew">
+                    {{ $t('swagFaq.item.unsaved') }}
+                </span>
+                <mt-button
+                    class="delete-button"
+                    variant="critical"
+                    @click="emit('onDelete', id)"
+                >
+                    {{ $t('swagFaq.item.delete') }}
+                </mt-button>
+            </div>
+        </div>
         <p class="answer">
-            <strong>{{ $t('swagFaq.list.answerPrefix') }}</strong>
+            <strong>{{ $t('swagFaq.item.answerPrefix') }}</strong>
             {{ answer }}
         </p>
     </div>
@@ -40,6 +48,16 @@ const emit = defineEmits<{
     margin: 0;
     background-color: rgb(204, 217, 236);
     color: black;
+
+    h2 {
+        margin: 0;
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .answer {
