@@ -74,7 +74,7 @@
         .reveal .small {
             font-size: 0.6em;
         }
-      
+
         code.inline {
             background-color: #22272e;
             color: #adbac7;
@@ -272,18 +272,18 @@
                 </div>
 
                 <div class="panel" style="background: #22272e;">
-                    SwagCustomizedProducts<br>
-                    <small>Commercial feature for product configurator</small>
+                    meteor<br>
+                    <small>admin-sdk, component-library, icon-kit</small>
                 </div>
 
                 <div class="panel" style="background: #22272e;">
-                    SwagCmsExtensions<br>
-                    <small>Commercial features for the CMS</small>
+                    shopware-cli<br>
+                    <small>Manage, build, validate extensions</small>
                 </div>
 
                 <div class="panel" style="background: #22272e;">
-                    SwagAnalytics<br>
-                    <small>Analytics features</small>
+                    frontends<br>
+                    <small>Vue.js framework for building custom storefronts</small>
                 </div>
             </div>
         </section>
@@ -333,7 +333,6 @@
                         <li>Most stable</li>
                         <li>No PHP access</li>
                         <li>Works on-prem, PaaS and SaaS</li>
-                        <li>Does not work on-prem due to security reasons</li>
                     </ul>
                 </div>
                 <div class="panel" style="background: #22272e;">
@@ -342,31 +341,10 @@
                         <li>Most capabilities</li>
                         <li>Access to the code and PHP</li>
                         <li>Works on-prem and PaaS</li>
+                        <li>Does not work Saas due to security reasons</li>
                     </ul>
                 </div>
             </div>
-        </section>
-
-        <section>
-            <h2>Setup</h2>
-
-            <pre><code data-trim class="language_bash">
-                # Clone repository from github
-                git clone git@github.com:shopwareLabs/us-dev-training.git
-
-                # Create a symlink to your shopware plugins directory
-                ln -s /absolute/path/to/us-dev-training/SwagFaq/
-                      shopware/custom/plugins/
-
-                # Refresh installed plugins
-                bin/console plugin:refresh
-
-                # Install and activate plugin
-                bin/console plugin:install SwagFaq --activate
-
-                # Verify plugin installed and active
-                bin/console plugin:list
-            </code></pre>
         </section>
 
         <section>
@@ -402,6 +380,8 @@
                     public string $name;
                 }
             </code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/entities-via-attributes.html">Documentation</a>
         </section>
 
         <section>
@@ -409,7 +389,7 @@
             <h3>Registering the entity</h3>
 
             <pre><code data-trim class="language_xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Core\Content\Example\ExampleEntity">
                     <tag name="shopware.entity"/>
@@ -465,6 +445,8 @@
                     }
                 }
             </code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-complex-data-to-existing-entities.html">Documentation</a>
         </section>
 
         <section>
@@ -472,7 +454,7 @@
             <h3>Registering the extension</h3>
 
             <pre><code data-trim class="language_xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Extension\Content\Product\CustomExtension">
                     <tag name="shopware.entity.extension"/>
@@ -498,7 +480,7 @@
             <h3>Using the repository</h3>
 
             <pre><code data-trim class="language_xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Service\ReadingData">
                     <argument type="service" id="product.repository"/>
@@ -509,7 +491,7 @@
         <section>
             <h2>Reading data</h2>
 
-            <pre><code data-trim class="language_php" data-line-numbers="0|10-15|17-22|24-31"><script type="text/template">
+            <pre><code data-trim class="language_php" data-line-numbers="0|10-15|17-22|24-31|33-39"><script type="text/template">
                 // SwagExamplePlugin/src/Service/ReadingData.php
 
                 namespace SwagExamplePlugin\Service;
@@ -541,14 +523,24 @@
 
                         $products = $this->productRepository->search($criteria, $context);
                     }
+
+                    public function readIds(Context $context): void
+                    {
+                        $criteria = new Criteria();
+                        $criteria->addFilter(new EqualsFilter('name', 'Example name'));
+
+                        $products = $this->productRepository->searchIds($criteria, $context);
+                    }
                 }
             </script></code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/reading-data.html">Documentation</a>
         </section>
 
         <section>
             <h2>Writing data</h2>
 
-            <pre><code data-trim class="language_php" data-line-numbers="0|18-27|29-37|39-46"><script type="text/template">
+            <pre><code data-trim class="language_php" data-line-numbers="0|18-27|29-37|39-47|49-56"><script type="text/template">
                 // SwagExamplePlugin/src/Service/WritingData.php
 
                 namespace SwagExamplePlugin\Service;
@@ -587,6 +579,16 @@
                         ], $context);
                     }
 
+                    public function createOrUpdateData(string $id, Context $context): void
+                    {
+                        $this->productRepository->upsert([
+                            [
+                                'id' => $id,
+                                'name' => 'Updated product',
+                            ]
+                        ], $context);
+                    }
+
                     public function deleteData(string $id, Context $context): void
                     {
                         $this->productRepository->delete([
@@ -597,6 +599,8 @@
                     }
                 }
             </script></code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/writing-data.html">Documentation</a>
         </section>
 
         <section>
@@ -633,12 +637,18 @@
             <h3>Registering the command</h3>
 
             <pre><code data-trim class="language_xml"><script type="text/template">
-                // SwagExamplePlugin/Resources/config/services.xml
+                <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Command\ExampleCommand">
                     <tag name="console.command"/>
                 </service>
             </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Short break</h2>
+
+            <p>See you in 10 minutes</p>
         </section>
 
         <section>
@@ -664,6 +674,34 @@
                 </li>
 
             </ul>
+        </section>
+
+        <section>
+            <h2>Setup</h2>
+
+            <pre><code data-trim class="language_bash">
+                # Clone repository from github
+                git clone git@github.com:shopwareLabs/us-dev-training.git -b task-one
+
+                # Create a symlink to your shopware plugins directory
+                ln -s /absolute/path/to/us-dev-training/SwagFaq/
+                      shopware/custom/plugins/
+
+                # Refresh installed plugins
+                bin/console plugin:refresh
+
+                # Install and activate plugin
+                bin/console plugin:install SwagFaq --activate
+
+                # Verify plugin installed and active
+                bin/console plugin:list
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Task 1 results</h2>
+
+            <p>Let's see what we built</p>
         </section>
 
         <section>
@@ -1297,23 +1335,88 @@ console.log(products);
                     <li>JS will be bundled webpack.</li>
                 </ul>
             </section>
-            <section>
-                <h3>Add JavaScript</h3>
+        <section>
+            <h2>Add storefront JS plugin</h2>
 
-                <pre><code data-trim class="language-javascript">
-                // SwagFaq/src/Resources/app/src/main.js
+            <pre><code data-trim class="language-javascript" data-line-numbers="0|8-11|13-21|26-34"><script type="text/template">
+                // SwagExamplePlugin/src/Resources/app/storefront/src/example-plugin/example-plugin.plugin.js
+
+                import HttpClient from "src/service/http-client.service";
+
+                const { PluginBaseClass } = window;
+
+                export default class ExamplePlugin extends PluginBaseClass {
+                    static options = {
+                        id: null,
+                        name: null
+                    };
+
+                    init() {
+                        this._client = new HttpClient();
+
+                        this._registerEvents();
+                    }
+
+                    _registerEvents() {
+                        this.button.onclick = this._submit.bind(this);
+                    }
+
+                    async _submit(event) {
+                        event.preventDefault();
+
+                        this._client.post(
+                            '/store-api/example',
+                            JSON.stringify({
+                                id: this.id,
+                                name: this.name,
+                            }),
+                            (response) => {
+                                console.log(response);
+                            }
+                        );
+                    }
+                }
+            </script></code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-javascript.html">Documentation</a>
+        </section>
+
+        <section>
+            <h2>Add storefront JS plugin</h2>
+            <h3>Registering your plugin</h3>
+
+            <pre><code data-trim class="language-javascript">
+                // SwagExamplePlugin/src/Resources/app/storefront/src/main.js
 
                 window.PluginManager.register(
-                    'SwagFaq',
-                    () => import('src/plugin/my-plugin'),
-                    '[data-swag-fag]'
+                    'ExamplePlugin',
+                    () => import('./example-plugin/example-plugin.plugin'),
+                    '[data-example-plugin]'
                 );
-                </code></pre>
-                <ul>
-                    <li>JavaScript is written in vanilla JavaScript.</li>
-                    <li>You can use bootstrap JavaScript e.g. Events.</li>
-                </ul>
-            </section>
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Add storefront JS plugin</h2>
+            <h3>Loading your plugin</h3>
+
+            <pre><code data-trim class="language-twig" data-line-numbers="0|5-8|13"><script type="text/template">
+                // SwagExamplePlugin/src/Resources/views/storefront/page/product-detail/index.html.twig
+
+                {% sw_extends '@Storefront/storefront/page/product-detail/index.html.twig' %}
+
+                {% set examplePluginOptions = {
+                    id: page.product.id,
+                    name: page.product.name,
+                } %}
+
+                {% block page_product_detail_content %}
+                    {{ parent() }}
+
+                    <template data-example-plugin data-example-plugin-options='{{ examplePluginOptions|json_encode }}'></template>
+                {% endblock %}
+            </script></code></pre>
+        </section>
 <!--        </section>-->
 
         <section>
@@ -1359,21 +1462,20 @@ console.log(products);
                     }
                 }
             </code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/storefront/add-custom-controller.html">Documentation</a>
         </section>
 
         <section>
             <h2>Add custom controller</h2>
             <h3>Registering your controller</h3>
 
-            <pre><code data-trim class="language-xml"><script type="text/template">
+            <pre><code data-trim class="language_xml"><script type="text/template">
                 <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="SwagExamplePlugin\Storefront\Controller\ExampleController" public="true">
                     <call method="setContainer">
                         <argument type="service" id="service_container"/>
-                    </call>
-                    <call method="setTwig">
-                        <argument type="service" id="twig"/>
                     </call>
                 </service>
             </script></code></pre>
@@ -1383,7 +1485,7 @@ console.log(products);
             <h2>Add custom controller</h2>
             <h3>Registering the routes</h3>
 
-            <pre><code data-trim class="language-xml"><script type="text/template">
+            <pre><code data-trim class="language_xml"><script type="text/template">
                 <!-- SwagExamplePlugin/src/Resources/config/routes.xml -->
 
                 <routes xmlns="http://symfony.com/schema/routing"
@@ -1399,10 +1501,10 @@ console.log(products);
         <section>
             <h2>Shopware API</h2>
             <ul>
-                <li>Store API</li>
-                <li>Admin API</li>
+                <li>Storefront controller</li>
+                <li>Store API route</li>
             </ul>
-            <p>What is the difference?</p>
+            <p>What should you use?</p>
         </section>
 
         <section>
@@ -1475,13 +1577,15 @@ console.log(products);
                     }
                 }
             </script></code></pre>
+
+            <a href="https://developer.shopware.com/docs/guides/plugins/plugins/framework/store-api/add-store-api-route.html">Documentation</a>
         </section>
 
         <section>
             <h2>Add store API route</h2>
             <h3>Registering the route</h3>
 
-            <pre><code data-trim class="language-xml"><script type="text/template">
+            <pre><code data-trim class="language_xml"><script type="text/template">
                 <!-- SwagExamplePlugin/Resources/config/services.xml -->
 
                 <service id="Swag\BasicExample\Core\Content\Example\SalesChannel\ExampleRoute">
@@ -1489,91 +1593,10 @@ console.log(products);
                 </service>
             </script></code></pre>
 
-            <pre><code data-trim class="language-xml"><script type="text/template">
+            <pre><code data-trim class="language_xml"><script type="text/template">
                 <!-- SwagExamplePlugin/src/Resources/config/routes.xml -->
 
                 <import resource="../../Core/**/*Route.php" type="attribute" />
-            </script></code></pre>
-        </section>
-
-        <section>
-            <h2>Add storefront JS plugin</h2>
-
-            <pre><code data-trim class="language-javascript" data-line-numbers="0|8-11|13-21|26-34"><script type="text/template">
-                // SwagExamplePlugin/src/Resources/app/storefront/src/example-plugin/example-plugin.plugin.js
-
-                import HttpClient from "src/service/http-client.service";
-
-                const { PluginBaseClass } = window;
-
-                export default class ExamplePlugin extends PluginBaseClass {
-                    static options = {
-                        id: null,
-                        name: null
-                    };
-
-                    init() {
-                        this._client = new HttpClient();
-
-                        this._registerEvents();
-                    }
-
-                    _registerEvents() {
-                        this.button.onclick = this._submit.bind(this);
-                    }
-
-                    async _submit(event) {
-                        event.preventDefault();
-
-                        this._client.post(
-                            '/store-api/example',
-                            JSON.stringify({
-                                id: this.id,
-                                name: this.name,
-                            }),
-                            (response) => {
-                                console.log(response);
-                            }
-                        );
-                    }
-                }
-            </script></code></pre>
-        </section>
-
-        <section>
-            <h2>Add storefront JS plugin</h2>
-            <h3>Registering your plugin</h3>
-
-            <pre><code data-trim class="language-javascript">
-                // SwagExamplePlugin/src/Resources/app/storefront/src/main.js
-
-                window.PluginManager.register(
-                    'ExamplePlugin',
-                    () => import('./example-plugin/example-plugin.plugin'),
-                    '[data-example-plugin]'
-                );
-            </code></pre>
-        </section>
-
-        <section>
-            <h2>Add storefront JS plugin</h2>
-            <h3>Loading your plugin</h3>
-
-            <pre><code data-trim class="language-twig" data-line-numbers="0|5-8|13"><script type="text/template">
-                // SwagExamplePlugin/src/Resources/views/storefront/page/product-detail/index.html.twig
-
-                {% sw_extends '@Storefront/storefront/page/product-detail/index.html.twig' %}
-
-                {% set examplePluginOptions = {
-                    id: page.product.id,
-                    name: page.product.name,
-                } %}
-
-                {% block page_product_detail_content %}
-                    {{ parent() }}
-
-                    <template data-example-plugin data-example-plugin-options='{{ examplePluginOptions|json_encode }}'></template>
-                {% endblock %}
             </script></code></pre>
         </section>
 
@@ -1586,6 +1609,15 @@ console.log(products);
                 <li>create storefront controller to expose the new route</li>
                 <li>create a form in the FAQ CMS element to submit new entry</li>
                 <li>optional: submit form via AJAX by creating a storefront JS plugin</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Some best practices</h2>
+
+            <ul>
+                <li>...</li>
+                <li>...</li>
             </ul>
         </section>
     </div>
@@ -1602,6 +1634,7 @@ console.log(products);
     Reveal.initialize({
         hash: true,
         center: false,
+        slideNumber: 'c/t',
         // Learn about plugins: https://revealjs.com/plugins/
         plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
     });
