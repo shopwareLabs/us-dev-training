@@ -28,6 +28,13 @@
             --r-highlight-color: #adbac7;
         }
 
+        .reveal .slide-number {
+            font-size: 0.5em;
+            bottom: unset;
+            top: 8px;
+            background-color: unset;
+        }
+
         .reveal pre {
             font-size: 0.5em;
         }
@@ -41,24 +48,23 @@
         .reveal .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 0.4rem;
         }
 
         .reveal .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.4rem;
-
-            /* Nested sub-panel */
-            .panel {
-                background: rgba(0, 0, 0, 0.1);
-            }
         }
 
         .reveal .panel {
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 0.4rem;
+            margin: 0.2rem;
             border-radius: 0.5rem;
+
+            /* Nested sub-panel */
+            .panel {
+                background: rgba(0, 0, 0, 0.1);
+            }
         }
 
         .reveal .headline-sm {
@@ -706,6 +712,7 @@
 
         <section>
             <h1>Administration</h1>
+            <img src="img/AdministrationDashboard.png" height="500px" alt="">
         </section>
 
         <section>
@@ -725,46 +732,74 @@
             </ul>
         </section>
 
-        <section data-auto-animate>
-            <h2>How to extend the Administration</h2>
-            <ul>
-                <li><strong>Plugins</strong><br>
-                    <small>Most powerful, can override or extend any component.</small>
-                </li>
-                <li><strong>Apps / AdminSDK</strong><br>
-                    <small>
-                        Less powerful, but a lot more stable between shopware updates.
-                        Can't override existing components, but instead utilises specific extension points and APIs
-                        <br>
-                        <span>💡AdminSDK can also be used inside Plugins</span>
-                    </small>
-                </li>
-            </ul>
-        </section>
+        <section>
+            <h2>Admin Plugin Extensions</h2>
+            <div class="panel" style="background: #285d7e;">
+                Admin browser window
 
-        <section data-auto-animate>
-            <h2>How to extend the Administration</h2>
-            <ul>
-                <li><strong>Plugins</strong><br>
-                    <small>Most powerful, can override or extend any component.</small>
-                </li>
-                <li><strong>Apps / AdminSDK</strong><br>
-                    <small>
-                        Less powerful, but a lot more stable between shopware updates.
-                        Can't override existing components, but instead utilises specific extension points and APIs
-                        <br>
-                        <span style="background-color: var(--r-link-color);">💡AdminSDK can also be used inside Plugins</span>
-                    </small>
-                </li>
-            </ul>
+                <div class="panel small">
+                    Admin code
+                </div>
+                <div class="grid-2">
+                    <div class="panel small">
+                        Plugin A code
+                    </div>
+                    <div class="panel small">
+                        Plugin B code
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 16px;">
+                <ul>
+                    <li>Fixed tech stack</li>
+                    <li>Most powerful: override / extend any Admin component</li>
+                    <li>Major updates can easily break plugins</li>
+                </ul>
+            </div>
         </section>
 
         <section>
-            <h2>What is the AdminSDK?</h2>
+            <h2>Admin App Extensions</h2>
+                <div class="panel" style="background: #285d7e;">
+                    Admin browser window
+                </div>
+                <div class="panel" style="background: #936319;">
+                    App / SDK iFrame
+                    <div class="panel small">
+                        App A: Main hidden
+                    </div>
+                </div>
+                <div class="panel" style="background: #936319;">
+                    App / SDK iFrame
+                    <div class="panel small">
+                        App A: Location X
+                    </div>
+                </div>
+                <div>
+                    <ul>
+                        <li>Isolated, Apps support SaaS</li>
+                        <li>Flexible tech stack</li>
+                        <li>Utilises specific extension points and APIs</li>
+                        <li>More stable extension system</li>
+                        <li>AdminSDK can be used inside plugins</li>
+                    </ul>
+                </div>
+        </section>
+
+        <section>
+            <h2>How the AdminSDK works</h2>
+            <img src="img/post-message-communication.png" alt="">
+            <small>
+                <a href="https://developer.shopware.com/resources/admin-extension-sdk/internals/how-it-works.html">Documentation</a>
+            </small>
+        </section>
+
+        <section>
+            <h2>How to use the AdminSDK</h2>
             <ul>
                 <li>You bring your own tech stack, which is rendered in iFrames at specific extension points</li>
                 <li>The <a href="https://github.com/shopware/meteor/tree/main/packages/admin-sdk">AdminSDK</a> allows interactions with shopware</li>
-                <li>To keep the UX/UI consistent, use our <a href="https://github.com/shopware/meteor/tree/main/packages/component-library">Meteor component library</a></li>
+                <li>To keep the UI/UX consistent, use our <a href="https://github.com/shopware/meteor/tree/main/packages/component-library">Meteor component library</a></li>
             </ul>
         </section>
 
@@ -772,14 +807,13 @@
             <h2>iFrame & Location Concept</h2>
             <ul>
                 <li>Extensions run in a hidden iFrame first to register extension points</li>
-                <li>Each visible view gets a unique <code class="inline">locationId</code></li>
+                <li>Each component section (iFrame) gets a unique <code class="inline">locationId</code></li>
                 <li>The height of iFrames can be automatically adjusted</li>
-                <li>iFrames provide an isolated environment for extensions. Communication happens over the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">postMessage API</a>, abstracted by the AdminSDK</li>
             </ul>
         </section>
 
         <section>
-            <h2>Basic plugin structure</h2>
+            <h2>Recommended plugin with SDK structure</h2>
             <pre><code data-trim class="language-txt no-line-numbers" data-line-numbers="|7,10|8,11|8,12,13">
                 shopware-root/custom/plugins/
                 └── 📁SwagFaq
@@ -798,8 +832,36 @@
         </section>
 
         <section>
+            <h2>Plugin + SDK entry points</h2>
+            <div class="panel" style="background: #285d7e;">
+                Admin browser window
+
+                <div class="panel small">
+                    Admin code
+                </div>
+                <div class="panel small">
+                    Plugin main.ts
+                </div>
+            </div>
+            <div class="panel" style="background: #936319;">
+                SDK iFrame (main hidden)
+
+                <div class="panel small">
+                    Plugin main.ts
+                </div>
+            </div>
+            <div class="panel" style="background: #936319;">
+                SDK iFrame (for each location X)
+
+                <div class="panel small">
+                    Plugin main.ts
+                </div>
+            </div>
+        </section>
+
+        <section>
             <h2>Plugin initialization</h2>
-            <pre><code data-trim class="language-typescript" data-line-numbers="1|4-8|9-15|16-22|23-27">
+            <pre><code data-trim class="language-typescript" data-line-numbers="1,2|4-8|9-15|16-22|23-27">
 // SwagFaq/src/Resources/app/administration/src/main.ts
 import { location } from '@shopware-ag/meteor-admin-sdk';
 
@@ -833,7 +895,7 @@ if (location.isIframe()) {
 
         <section>
             <h2>Registering extension points</h2>
-            <pre><code data-trim class="language-typescript" data-line-numbers="1|8-13|10|15-24|22">
+            <pre><code data-trim class="language-typescript" data-line-numbers="1,2|8-13|10|15-24|22">
 // SwagFaq/src/Resources/app/administration/src/init-sdk.ts
 import { ui } from '@shopware-ag/meteor-admin-sdk';
 
@@ -864,7 +926,7 @@ import { ui } from '@shopware-ag/meteor-admin-sdk';
 
         <section>
             <h2>Rendering components for locations</h2>
-            <pre><code data-trim class="language-typescript" data-line-numbers="1|5-13|15-20|22-24">
+            <pre><code data-trim class="language-typescript" data-line-numbers="1-3|5-13|15-20|22-24">
 // SwagFaq/src/Resources/app/administration/src/locations/init-locations.ts
 import { createApp, h, defineAsyncComponent } from 'vue';
 import { location } from '@shopware-ag/meteor-admin-sdk';
@@ -1023,15 +1085,14 @@ console.log(products);
                 <li>Add tab + card to product detail page</li>
                 <li>Get the product <code class="inline">id</code> and <code class="inline">versionId</code> of the detail page</li>
                 <li>Query the <code class="inline">swag_faq_entry</code> repository</li>
-                <li>Display the questions and answers in the card</li>
+                <li>(Optional) Display the questions and answers in the card</li>
             </ul>
         </section>
 
         <section>
-            <h1>Live demo</h1>
-            <h2>Our complete admin solution</h2>
+            <h1>Show and tell</h1>
             <small>
-                <a href="https://github.com/shopwareLabs/us-dev-training/tree/main">Repository</a>
+                <a href="https://github.com/shopwareLabs/us-dev-training/tree/main">Our complete admin solution</a>
             </small>
         </section>
 
@@ -1111,7 +1172,7 @@ console.log(products);
                                     └── 🌱base.html.twig <--
                 </code></pre>
                 <ul>
-                    <li>Structure from /Resources/ needs to be the same.</li>
+                    <li>Structure from <code class="inline">/Resources/</code> needs to be the same.</li>
                     <li>Creating the same file results in an override.</li>
                 </ul>
             </section>
