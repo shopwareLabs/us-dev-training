@@ -2,7 +2,8 @@
   "name": "swag-faq",
   "version": "1.0.0",
   "description": "FAQ module for the product detail page",
-  "main": "index.js",
+  "main": "src/main.ts",
+  "type": "module",
   "scripts": {
     "lint:all": "npm run lint:eslint && vue-tsc --noEmit",
     "lint:all:fix": "npm run lint:eslint -- --fix && vue-tsc --noEmit",
@@ -16,6 +17,7 @@
     "@shopware-ag/meteor-admin-sdk": "^5.7.8",
     "@shopware-ag/meteor-component-library": "^4.8.0",
     "@shopware-ag/meteor-icon-kit": "^5.4.0",
+    "uuidv7": "^1.0.2",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.2"
   },

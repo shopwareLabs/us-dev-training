@@ -1,66 +1,100 @@
 <script lang="ts" setup>
 import faqItem from '../components/faq-item.vue';
 import { data } from '@shopware-ag/meteor-admin-sdk';
-import { computed, onMounted, ref } from 'vue';
-import { MtButton, MtTextField } from '@shopware-ag/meteor-component-library';
-import EntityCollection from '@shopware-ag/meteor-admin-sdk/es/_internals/data/EntityCollection';
+import { ref, watch, watchEffect } from 'vue';
+import {
+    MtButton,
+    MtTextField,
+    MtLoader,
+} from '@shopware-ag/meteor-component-library';
+import { createId } from '../utils';
 
 const { Criteria } = data.Classes;
-
-const product = ref<EntitySchema.Entity<'product'> | null>(null);
 const faqEntryRepository = data.repository('swag_faq_entry');
 
-const faqEntries = computed({
-    get(): EntitySchema.EntityCollection<'swag_faq_entry'> | null {
-        return product.value?.extensions
-            ?.swagFaqEntries as EntitySchema.EntityCollection<'swag_faq_entry'> | null;
-    },
-    set(value: EntitySchema.EntityCollection<'swag_faq_entry'> | null): void {
-        if (product.value?.extensions) {
-            product.value.extensions.swagFaqEntries = value;
-        }
+interface PartialProduct {
+    id: string;
+    versionId: string;
+    extensions: {
+        swagFaqEntries: EntitySchema.EntityCollection<'swag_faq_entry'> | null;
+    };
+}
 
-        data.update({
-            id: 'sw-product-detail__product',
-            data: {
-                extensions: {
-                    swagFaqEntries: value,
-                },
-            },
-        });
+const isLoading = ref(true);
+const product = ref<PartialProduct | null>(null);
+const faqEntries = ref<EntitySchema.EntityCollection<'swag_faq_entry'> | null>(
+    null
+);
+
+data.subscribe(
+    'sw-product-detail__product',
+    async ({ data }) => {
+        product.value = data as PartialProduct;
     },
+    {
+        selectors: ['id', 'versionId', 'extensions'],
+    }
+);
+
+watch(product, async (newValue, oldValue) => {
+    console.log('productDataUpdated', newValue, oldValue);
+    if (
+        (!oldValue?.id && newValue?.id) ||
+        (oldValue?.extensions?.swagFaqEntries?.length &&
+            oldValue?.extensions?.swagFaqEntries?.length > 0 &&
+            newValue?.extensions?.swagFaqEntries?.length === 0)
+    ) {
+        // Note: the second condition checks if the product data was emptied,
+        // This happens on save
+
+        console.log('re-fetch faq entries');
+        isLoading.value = true;
+
+        const criteria = new Criteria();
+        criteria.addFilter(
+            Criteria.multi('and', [
+                Criteria.equals('productId', newValue.id),
+                Criteria.equals('productVersionId', newValue.versionId),
+            ])
+        );
+
+        faqEntries.value = await faqEntryRepository.search(criteria);
+        isLoading.value = false;
+    }
 });
 
-onMounted(async () => {
-    // Todo: on page reload when on the faq tab this is sometimes null
-    // Todo: how can we wait for it to be there?
-    product.value = (await data.get({
+watchEffect(async () => {
+    console.log('update shopware state', faqEntries.value);
+    await data.update({
         id: 'sw-product-detail__product',
-        selectors: ['id', 'versionId', 'extensions'],
-    })) as EntitySchema.Entity<'product'>;
-    const criteria = new Criteria();
-    criteria.addFilter(
-        Criteria.multi('and', [
-            Criteria.equals('productId', product.value.id),
-            Criteria.equals('productVersionId', product.value.versionId),
-        ])
-    );
-
-    faqEntries.value = await faqEntryRepository.search(criteria);
+        data: {
+            extensions: {
+                swagFaqEntries: faqEntries.value,
+            },
+        },
+    });
 });
 
 async function onDelete(id: string) {
-    if (!faqEntries.value) return;
+    // Note: best practice would be to show a confirmation modal first
+    // To keep it simple we skip that here
 
-    // Todo: add confirm modal
+    if (!faqEntries.value) return;
+    isLoading.value = true;
+
     const toDelete = faqEntries.value.find((entry) => entry.id === id);
     if (!toDelete) {
         return;
     }
-    await faqEntryRepository.delete(toDelete.id);
-    faqEntries.value = faqEntries.value.filter(
-        (entry) => entry.id !== id
-    ) as EntityCollection<'swag_faq_entry'>;
+
+    if (!toDelete._isNew) {
+        await faqEntryRepository.delete(toDelete.id);
+    }
+
+    const toDeleteIndex = faqEntries.value.indexOf(toDelete);
+    faqEntries.value.splice(toDeleteIndex, 1);
+
+    isLoading.value = false;
 }
 
 const newQuestion = ref('');
@@ -70,12 +104,10 @@ async function onAddButtonClicked() {
     if (newEntry) {
         newEntry.question = newQuestion.value;
         newEntry.answer = newAnswer.value;
+        newEntry.id = createId();
 
-        // Todo this is ugly, is there another way to trigger the setter?
-        faqEntries.value = [
-            ...(faqEntries.value ?? []),
-            newEntry,
-        ] as EntityCollection<'swag_faq_entry'>;
+        faqEntries.value?.push(newEntry);
+
         newQuestion.value = '';
         newAnswer.value = '';
     }
@@ -98,8 +130,8 @@ async function onAddButtonClicked() {
             {{ $t('swagFaq.form.add') }}
         </MtButton>
     </div>
-    <hr />
-    <p v-if="faqEntries?.length === 0">
+    <mt-loader v-if="isLoading" />
+    <p v-else-if="faqEntries?.length === 0">
         {{ $t('swagFaq.list.emptyMessage') }}
     </p>
     <faq-item
@@ -109,8 +141,13 @@ async function onAddButtonClicked() {
         :key="entry.id"
         :question="entry.question"
         :answer="entry.answer"
+        :is-new="entry._isNew ?? false"
         @on-delete="onDelete"
     />
 </template>
 
-<style scoped></style>
+<style scoped>
+.faq-list__form {
+    margin-bottom: 16px;
+}
+</style>
