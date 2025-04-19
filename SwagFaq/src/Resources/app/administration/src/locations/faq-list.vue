@@ -26,6 +26,10 @@ const faqEntries = ref<EntitySchema.EntityCollection<'swag_faq_entry'> | null>(
     null
 );
 
+/**
+ * Subscribe to product detail data
+ * Update reactive product ref
+ */
 data.subscribe(
     'sw-product-detail__product',
     async ({ data }) => {
@@ -36,18 +40,20 @@ data.subscribe(
     }
 );
 
+/**
+ * Watch product ref, fetch faq entries when:
+ * - initially got a product id + versionId
+ * - product was saved -> extensions are emptied
+ */
 watch(product, async (newValue, oldValue) => {
-    console.log('productDataUpdated', newValue, oldValue);
     if (
         (!oldValue?.id && newValue?.id) ||
         (oldValue?.extensions?.swagFaqEntries?.length &&
             oldValue?.extensions?.swagFaqEntries?.length > 0 &&
             newValue?.extensions?.swagFaqEntries?.length === 0)
     ) {
-        // Note: the second condition checks if the product data was emptied,
-        // This happens on save
-
-        console.log('re-fetch faq entries');
+        // Note: the second condition checks if the product data
+        // extensions was emptied, this happens on save
         isLoading.value = true;
 
         const criteria = new Criteria();
@@ -63,8 +69,13 @@ watch(product, async (newValue, oldValue) => {
     }
 });
 
+/**
+ * Watch faqEntries, on update
+ * push data back into product detail.
+ *
+ * So it can be saved together with the product
+ */
 watchEffect(async () => {
-    console.log('update shopware state', faqEntries.value);
     await data.update({
         id: 'sw-product-detail__product',
         data: {
@@ -88,6 +99,7 @@ async function onDelete(id: string) {
     }
 
     if (!toDelete._isNew) {
+        // delete it from the DB
         await faqEntryRepository.delete(toDelete.id);
     }
 
@@ -101,21 +113,24 @@ const newQuestion = ref('');
 const newAnswer = ref('');
 async function onAddButtonClicked() {
     const newEntry = await faqEntryRepository.create();
-    if (newEntry) {
-        newEntry.question = newQuestion.value;
-        newEntry.answer = newAnswer.value;
-        newEntry.id = createId();
-
-        faqEntries.value?.push(newEntry);
-
-        newQuestion.value = '';
-        newAnswer.value = '';
+    if (!newEntry || !faqEntries.value) {
+        console.error('failed to create new faqEntry');
+        return;
     }
+
+    newEntry.question = newQuestion.value;
+    newEntry.answer = newAnswer.value;
+    newEntry.id = createId();
+
+    faqEntries.value.push(newEntry);
+
+    newQuestion.value = '';
+    newAnswer.value = '';
 }
 </script>
 
 <template>
-    <div class="faq-list__form">
+    <form class="faq-list__form">
         <MtTextField
             v-model="newQuestion"
             :label="$t('swagFaq.form.questionLabel')"
@@ -126,10 +141,10 @@ async function onAddButtonClicked() {
             :label="$t('swagFaq.form.answerLabel')"
             :placeholder="$t('swagFaq.form.answerPlaceholder')"
         />
-        <MtButton variant="primary" @click="onAddButtonClicked">
+        <MtButton variant="primary" @click.prevent="onAddButtonClicked">
             {{ $t('swagFaq.form.add') }}
         </MtButton>
-    </div>
+    </form>
     <mt-loader v-if="isLoading" />
     <p v-else-if="faqEntries?.length === 0">
         {{ $t('swagFaq.list.emptyMessage') }}
