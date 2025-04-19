@@ -187,7 +187,7 @@
                     Commerce
                     <div class="grid-2">
                         <div class="panel small">
-                            <strong>Catalog</strong>
+                            <strong style="display: block;">Catalog</strong>
                             <ul>
                                 <li>Products</li>
                                 <li>Categories</li>
@@ -195,7 +195,7 @@
                             </ul>
                         </div>
                         <div class="panel small">
-                            <strong>Cart</strong>
+                            <strong style="display: block;">Cart</strong>
                             <ul>
                                 <li>Cart</li>
                                 <li>Orders</li>
@@ -203,7 +203,7 @@
                             </ul>
                         </div>
                         <div class="panel small">
-                            <strong>Content</strong>
+                            <strong style="display: block;">Content</strong>
                             <ul>
                                 <li>Shopping Experiences (CMS)</li>
                             </ul>
@@ -335,8 +335,8 @@
                 <div class="panel" style="background: #22272e;">
                     Apps
                     <ul class="small">
-                        <li>Most stable</li>
-                        <li>API driven, no PHP access</li>
+                        <li>Most stable, isolated</li>
+                        <li>API driven with Webhooks and App scripts (Twig), bring your own Backend + Frontend (iFrames) + Twig templates</li>
                         <li>Works on-prem, PaaS and SaaS</li>
                     </ul>
                 </div>
@@ -346,7 +346,7 @@
                         <li>Most capabilities</li>
                         <li>Access to the code and PHP</li>
                         <li>Works on-prem and PaaS</li>
-                        <li>Does not work Saas due to security reasons</li>
+                        <li>Does not work in Saas due to security reasons</li>
                     </ul>
                 </div>
             </div>
@@ -1828,11 +1828,19 @@ class ProductPageCriteriaSubscriber implements EventSubscriberInterface
         </section>
 
         <section>
+            <h1>Some best practices</h1>
+        </section>
+
+        <section>
             <h2>Some best practices</h2>
+            <h3>Administration</h3>
 
             <ul>
-                <li>...</li>
-                <li>...</li>
+                <li>Prefer AdminSDK over <code class="inline">Component.extend</code> or <code class="inline">Component.override</code></li>
+                <li>Prefer Meteor components over others for consistent UI/UX</li>
+                <li>Prefer using TypeScript instead of JavaScript</li>
+                <li>Write automated tests (recommended Unit: Jest + Acceptance: Playwright)</li>
+                <li>Let them run in CI pipelines against multiple Shopware versions</li>
             </ul>
         </section>
     </div>
