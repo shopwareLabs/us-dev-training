@@ -198,8 +198,8 @@
                             <strong>Cart</strong>
                             <ul>
                                 <li>Cart</li>
-                                <li>Categories</li>
-                                <li>Sales Channels</li>
+                                <li>Orders</li>
+                                <li>Payments</li>
                             </ul>
                         </div>
                         <div class="panel small">
@@ -324,7 +324,6 @@
                         <li>Full code ownership like with self-hosted</li>
                         <li>Full extensions capabilities</li>
                         <li>Infrastructure done by shopware</li>
-                        <li>Deployments and automations done by shopware</li>
                     </ul>
                 </div>
             </div>
@@ -337,7 +336,7 @@
                     Apps
                     <ul class="small">
                         <li>Most stable</li>
-                        <li>No PHP access</li>
+                        <li>API driven, no PHP access</li>
                         <li>Works on-prem, PaaS and SaaS</li>
                     </ul>
                 </div>
@@ -1139,37 +1138,34 @@ console.log(products);
 
         <section>
             <p><strong>Example</strong></p>
-            <h2>Extend the base template</h2>
+            <h2>Extend a template</h2>
         </section>
 
 <!--        <section>-->
             <section>
                 <h3>Find the core template</h3>
-                <pre><code data-trim class="language-txt">
-                shopware-root/
-                └── 📁src
-                    └── 📁Storefront
-                        └── 📁Resources
-                            └── 📁views
-                                └── 📁storefront
-                                    ├── 📁block
-                                    ├── 📁component
-                                    ├── 📁element
-                                    ├── [...]
-                                    └── 🌱base.html.twig <--
+                <pre><code data-trim class="language-txt no-line-numbers" data-line-numbers="1-9|6">
+                shopware-root/src/Storefront/Resources/
+                └── 📁views/
+                    └── 📁storefront/
+                        └── 📁element/
+                            ├── ...
+                            ├── 🌱cms-element-product-description-reviews.html.twig <--
+                            ├── 🌱cms-element-product-listing.html.twig
+                            ├── 🌱cms-element-product-name.html.twig
+                            └── ...
                 </code></pre>
             </section>
 
             <section>
                 <h3>Add your template</h3>
                 <pre><code data-trim class="language-txt">
-                shopware-root/custom/plugins/
-                └── 📁SwagFaq
-                    └── 📁src
-                        └── 📁Resources
-                            └── 📁views
-                                └── 📁storefront
-                                    └── 🌱base.html.twig <--
+                shopware-root/custom/plugins/SwagFaq/src/Resources/
+                └── 📁views
+                    └── 📁storefront
+                        └── 📁element
+                            └── 🌱cms-element-product-description-reviews.html.twig <--
+
                 </code></pre>
                 <ul>
                     <li>Structure from <code class="inline">/Resources/</code> needs to be the same.</li>
@@ -1181,113 +1177,88 @@ console.log(products);
 <!--        <section>-->
             <section>
                 <h3>Find block in core template</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="1-8|38|38-58"><script type="text/template">
-                {# src/Storefront/Resources/views/storefront/base.html.twig #}
-                {% block base_doctype %}<!DOCTYPE html>{% endblock %}
+                <pre><code data-trim class="language-twig" data-line-numbers="0|15"><script type="text/template">
+{# src/Storefront/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+{% if element.data.product %}
+    <div class="product-detail-tabs cms-element-{{ element.type }}{% if config.alignment.value %} has-vertical-alignment{% endif %}">
+        <div class="card card-tabs">
+            {% block element_product_description_reviews_tabs_navigation %}
+                <div class="cms-card-header card-header product-detail-tab-navigation product-description-reviews-tab-navigation">
+                    {% block element_product_description_reviews_tabs_navigation_container %}
+                        <ul class="nav nav-tabs product-detail-tab-navigation-list"
+                            id="product-detail-tabs"
+                            role="tablist">
+                            {% block element_product_description_reviews_tabs_navigation_description %}
+                                {# ... #}
+                            {% endblock %}
 
-                {% block base_html %}
-                <html lang="{{ context.saleschannel.languages.first.translationCode.code }}"
-                      itemscope="itemscope"
-                      itemtype="https://schema.org/WebPage">
-                {% endblock %}
-
-                {% block base_head %}
-                    {% sw_include '@Storefront/storefront/layout/meta.html.twig' %}
-                {% endblock %}
-
-                {% block base_body %}
-                    <body class="{% block base_body_classes %}is-ctl-{% if controllerName is not empty %}{{ controllerName|lower }}{% endif %} is-act-{% if controllerAction is not empty %}{{ controllerAction|lower }}{% endif %}{% endblock %}">
-
-                    {% block base_body_inner %}
-                        {% block base_header %}
-                            {% sw_include '@Storefront/storefront/utilities/staging-info.html.twig' %}
-
-                            <header class="header-main">
-                                {% block base_header_inner %}
-                                    <div class="container">
-                                        {% sw_include '@Storefront/storefront/layout/header/header.html.twig' %}
-                                    </div>
-                                {% endblock %}
-                            </header>
-                        {% endblock %}
-
-                        {% block base_navigation %}
-                            <div class="nav-main">
-                                {% block base_navigation_inner %}
-                                    {% sw_include '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
-                                {% endblock %}
-                            </div>
-                        {% endblock %}
-
-                        {% block base_main %}
-                            <main class="content-main" id="content-main">
-                                {% block base_flashbags %}
-                                    <div class="flashbags container">
-                                        {% for type, messages in app.flashes %}
-                                            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with { type: type, list: messages } %}
-                                        {% endfor %}
-                                    </div>
-                                {% endblock %}
-
-                                {% block base_main_inner %}
-                                    <div class="container">
-                                        {% block base_main_container %}
-                                            <div class="container-main">
-                                                <!-- Main content -->
-                                            </div>
-                                        {% endblock %}
-                                    </div>
-                                {% endblock %}
-                            </main>
-                        {% endblock %}
-
-                        {% block base_footer %}
-                            <footer class="footer-main">
-                                {% block base_footer_inner %}
-                                    {% sw_include '@Storefront/storefront/layout/footer/footer.html.twig' %}
-                                {% endblock %}
-                            </footer>
-                        {% endblock %}
-                        {% endif %}
+                            {% block element_product_description_reviews_tabs_navigation_review %}
+                                {% if config('core.listing.showReview') %}
+                                    <li class="nav-item">
+                                        <a class="nav-link {% if (ratingSuccess == 1) or (ratingSuccess == -1) %}active{% endif %} product-detail-tab-navigation-link review-tab"
+                                           id="{{ reviewTabId }}"
+                                           data-bs-toggle="tab"
+                                           data-off-canvas-tabs="true"
+                                           href="{{ reviewTabHref }}"
+                                           role="tab"
+                                           aria-controls="{{ reviewTabContent }}"
+                                           aria-selected="true">
+                                            {{ "detail.tabsReview"|trans|sw_sanitize }}
+                                            <span class="product-detail-tab-navigation-icon">
+                                                {% sw_icon 'arrow-medium-right' style {'pack':'solid'} %}
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endblock %}
+                        </ul>
                     {% endblock %}
+                </div>
+            {% endblock %}
 
-                    {% block base_scroll_up %}
-                        {% sw_include '@Storefront/storefront/layout/scroll-up.html.twig' %}
-                    {% endblock %}
+            {% block element_product_description_reviews_tabs_content %}
+                <div class="product-detail-tabs-content card-body">
+                    {% block element_product_description_reviews_tabs_content_container %}
+                        <div class="tab-content">
+                            {% block element_product_description_reviews_tabs_content_description %}
+                                {# ... #}
+                            {% endblock %}
 
-                    {% block base_cookie_permission %}
-                        {% sw_include '@Storefront/storefront/layout/cookie/cookie-permission.html.twig' %}
+                            {% block element_product_description_reviews_tabs_content_review %}
+                                {# ... #}
+                            {% endblock %}
+                        </div>
                     {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endif %}
 
-                    {% block base_pseudo_modal %}
-                        {% sw_include '@Storefront/storefront/component/pseudo-modal.html.twig' %}
-                    {% endblock %}
 
-                    {% block base_body_script %}
-                    {% endblock %}
-                    </body>
-                {% endblock %}
-                </html>
                 </script></code></pre>
             </section>
 
             <section>
                 <h3>Extend block in your template</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="2|4-10"><script type="text/template">
-                {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
-                {% sw_extends '@Storefront/storefront/base.html.twig' %}
+                <pre><code data-trim class="language-twig" data-line-numbers="2|4-13"><script type="text/template">
+                {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+                {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
 
-                {% block base_main %}
-                    <div class="container">
-                        <div class="bg-success text-white p-3 my-3 fs-3 fw-bold">
-                            I override the main base_main block
-                        </div>
-                    </div>
+                {% block element_product_description_reviews_tabs_navigation_review %}
+                    <li class="nav-item">
+                        <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
+                           data-bs-toggle="tab"
+                           href="#"
+                           role="tab">
+                            My own tab
+                        </a>
+                    </li>
                 {% endblock %}
                 </script></code></pre>
 
                 <ul>
-                    <li><code class="inline">sw_extends</code> makes all blocks of <code class="inline">base.html.twig</code> available.</li>
+                    <li><code class="inline">sw_extends</code> makes all blocks of the extended template available.</li>
                     <li><code class="inline">sw_extends</code> enables multi-inheritance.</li>
                 </ul>
             </section>
@@ -1298,17 +1269,20 @@ console.log(products);
 
             <section>
                 <h3>Parent call</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="10"><script type="text/template">
-                {# SwagFaq/src/Resources/views/storefront/base.html.twig #}
-                {% sw_extends '@Storefront/storefront/base.html.twig' %}
+                <pre><code data-trim class="language-twig" data-line-numbers="5"><script type="text/template">
+                {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+                {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
 
-                {% block base_main %}
-                    <div class="container">
-                        <div class="bg-success text-white p-3 my-3 fs-3 fw-bold">
-                            I override the main base_main block
-                        </div>
-                    </div>
+                {% block element_product_description_reviews_tabs_navigation_review %}
                     {{ parent() }}
+                    <li class="nav-item">
+                        <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
+                           data-bs-toggle="tab"
+                           href="#"
+                           role="tab">
+                            My own tab
+                        </a>
+                    </li>
                 {% endblock %}
                 </script></code></pre>
 
@@ -1321,16 +1295,197 @@ console.log(products);
 <!--        </section>-->
 
         <section>
+            <h2>Add data to the Storefront</h2>
+        </section>
+
+        <section>
+            <h2>Add a subscriber</h2>
+            <pre><code data-trim class="language-txt"><script type="text/template">
+SwagFaq/src/Storefront
+    └── 📁Page
+        └── 📁Product
+            └── 📁Subscriber
+                └── 📄ProductPageCriteriaSubscriber.php
+            </script></code></pre>
+
+            <pre><code data-trim class="language-xml"><script type="text/template">
+            <!-- SwagFaq/Resources/config/services.xml -->
+            <service id="SwagFaq\Storefront\Page\Product\Subscriber\ProductPageCriteriaSubscriber">
+                <tag name="kernel.event_subscriber"/>
+            </service>
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Extend the criteria</h2>
+            <pre><code data-line-numbers="0|3|7|12-17|19-22" data-trim class="language-php"><script type="text/template">
+<?php declare(strict_types=1);
+
+namespace SwagFaq\Storefront\Page\Product\Subscriber;
+
+use Shopware\Commercial\Licensing\License;
+use Shopware\Core\Framework\Log\Package;
+use Shopware\Storefront\Page\Product\ProductPageCriteriaEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class ProductPageCriteriaSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            ProductPageCriteriaEvent::class => ['enrichCriteria', 100],
+        ];
+    }
+
+    public function enrichCriteria(ProductPageCriteriaEvent $event): void
+    {
+        $event->getCriteria()->addAssociation('swagFaqEntries');
+    }
+}
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Access the data</h2>
+
+            <pre><code data-trim data-line-numbers="7-8" class="language-twig"><script type="text/template">
+{# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+{% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
+
+{% block element_product_description_reviews_tabs_content_review %}
+    {{ parent() }}
+    <div class="tab-pane" id="#" role="tabpanel">
+        {{ dump() }}
+        {{ dump(page.product.extensions.swagFaqEntries) }}
+    </div>
+{% endblock %}
+            </script></code></pre>
+        </section>
+
+        <section>
+            <h2>Access the data</h2>
+            <img src="img/dump-data.png">
+        </section>
+
+        <section>
             <h2>Hands on</h2>
             <p>Try it yourself</p>
 
             <ul>
-                <li><strong>Task:</strong> Add an extra "Tab" to the product detail page</li>
-                <li>Next to "Descriptions" and "Reviews"</li>
-                <li>Find the correct template and override it</li>
-                <li>Use template extensions to add the "Tab"</li>
-                <li>Make the "Tab" and "Tab content" work with the existing Bootstrap tab structure</li>
+                <li><strong>Task:</strong> Add an extra Tab to the product detail page next to "Descriptions" and "Reviews".</li>
+                <li>Use template extensions to add the Tab.</li>
+                <li>Make the Tab and Tab content work with the existing Bootstrap tab structure.</li>
+                <li>Bonus: Add the criteria subscriber and display the actual FAQ data.</li>
             </ul>
+        </section>
+
+        <section>
+            <h2>Add a CMS element</h2>
+            <ul>
+                <li>CMS elements can be added by the user in the admin interface.</li>
+                <li>Can be used in a shopping experiences layout.</li>
+                <li>Additional configuration options can be added.</li>
+                <li>Flexible and re-usable.</li>
+                <li>More decoupled than a specific template override.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>CMS element structure</h2>
+            <div class="grid-2">
+                <div class="panel">
+                    Admin
+                    <ul class="small">
+                        <li>Registration with admin SDK</li>
+                        <li>Vue components for preview in the CMS</li>
+                        <li>Vue components for the configuration in the CMS</li>
+                    </ul>
+                </div>
+                <div class="panel">
+                    Storefront
+                    <ul class="small">
+                        <li>Twig template that renders the element</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Register a CMS element</h2>
+            <p>CMS elements can be registered via admin SDK</p>
+            <pre><code data-trim class="language-javascript">
+            // const LOCATION_CMS_ELEMENT = 'swagfaq'
+            await cms.registerCmsElement({
+                name: LOCATION_CMS_ELEMENT,
+                label: 'swagFaq.cms.elementLabel',
+                defaultConfig: {
+                    exampleConfig: {
+                        source: 'static',
+                        value: '',
+                    },
+                },
+            });
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Register a CMS block</h2>
+            <p>A block can contain multiple CMS elements</p>
+            <pre><code data-trim class="language-javascript">
+            // const LOCATION_CMS_ELEMENT = 'swagfaq'
+            await cms.registerCmsBlock({
+                name: 'swag-faq-block',
+                label: 'swagFaq.cms.blockLabel',
+                slots: [{ element: LOCATION_CMS_ELEMENT }], // <-- CMS element(s)
+                category: 'commerce',
+                slotLayout: {
+                    grid: 'auto',
+                },
+            });
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>CMS admin components</h2>
+            <pre><code data-trim class="language-txt">
+            SwagFaq/src/Resources/app
+            └── 📁administration
+                └── 📁src
+                    └── 📁locations
+                        ├── 📄faq-cms-config.vue  <-- Configuration modal
+                        ├── 📄faq-cms-element.vue <-- Element in CMS canvas
+                        └── 📄faq-cms-preview.vue <-- Small preview
+            </code></pre>
+
+            <pre><code data-trim class="language-javascript">
+            const locations = {
+                // ...
+                [`${LOCATION_CMS_ELEMENT}-element`]: defineAsyncComponent(
+                    () => import('./faq-cms-element.vue')
+                ),
+                [`${LOCATION_CMS_ELEMENT}-config`]: defineAsyncComponent(
+                    () => import('./faq-cms-config.vue')
+                ),
+                [`${LOCATION_CMS_ELEMENT}-preview`]: defineAsyncComponent(
+                    () => import('./faq-cms-preview.vue')
+                ),
+            };
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>Storefront template</h2>
+
+            <pre><code data-trim  class="language-txt">
+            SwagFaq/src/Resources/
+            └── 📁views
+                └── 📁storefront
+                    └── 📁element
+                        └── 📄cms-element-swagfaq.html.twig <--
+            </code></pre>
+
+            <p>The file name maps the CMS elements name</p>
+            <p><code class="inline">cms-element-{$el-name}.html.twig</code></p>
         </section>
 
         <section>
@@ -1338,64 +1493,63 @@ console.log(products);
             <h2>Add custom CSS</h2>
         </section>
 
-<!--        <section>-->
-            <section>
-                <h3>Add SCSS entry file</h3>
-                <pre><code data-trim data-line-numbers="5-9" class="language-txt">
-                shopware-root/custom/plugins/
-                └── 📁SwagFaq
-                    └── 📁src
-                        └── 📁Resources
-                            ├── 📁app
-                            │   └── 📁storefront
-                            │       └── 📁src
-                            │           └── 📁scss
-                            │               └── 📄base.scss
-                            └── 📁views
-                </code></pre>
-                <ul>
-                    <li>CSS is written in SCSS.</li>
-                    <li>The <code class="inline">base.scss</code> of the plugin is automatically picked up by shopware.</li>
-                </ul>
-            </section>
-            <section>
-                <h3>Add CSS</h3>
+        <section>
+            <h3>Add SCSS entry file</h3>
+            <pre><code data-trim data-line-numbers="5-9" class="language-txt">
+            shopware-root/custom/plugins/
+            └── 📁SwagFaq
+                └── 📁src
+                    └── 📁Resources
+                        ├── 📁app
+                        │   └── 📁storefront
+                        │       └── 📁src
+                        │           └── 📁scss
+                        │               └── 📄base.scss
+                        └── 📁views
+            </code></pre>
+            <ul>
+                <li>CSS is written in SCSS.</li>
+                <li>The <code class="inline">base.scss</code> of the plugin is automatically picked up by shopware.</li>
+            </ul>
+        </section>
 
-                <pre><code data-trim class="language-scss">
-                // SwagFaq/src/Resources/app/storefront/src/scss/base.scss
-                .footer-main {
-                    background: $primary-bg-subtle;
-                }
-                </code></pre>
-                <ul>
-                    <li>In the <code class="inline">base.scss</code> you can write any CSS.</li>
-                    <li>You can structure your SCSS with <code class="inline">@import</code> files.</li>
-                    <li>You can use Bootstrap SCSS variables and mixins.</li>
-                </ul>
-            </section>
-<!--        </section>-->
+        <section>
+            <h3>Add CSS</h3>
 
-<!--        <section>-->
-            <section>
-                <h3>Add JS entry file</h3>
+            <pre><code data-trim class="language-scss">
+            // SwagFaq/src/Resources/app/storefront/src/scss/base.scss
+            .footer-main {
+                background: $primary-bg-subtle;
+            }
+            </code></pre>
+            <ul>
+                <li>In the <code class="inline">base.scss</code> you can write any CSS.</li>
+                <li>You can structure your SCSS with <code class="inline">@import</code> files.</li>
+                <li>You can use Bootstrap SCSS variables and mixins.</li>
+            </ul>
+        </section>
 
-                <pre><code data-trim data-line-numbers="5-8" class="language-txt">
-                shopware-root/custom/plugins/
-                └── 📁SwagFaq
-                    └── 📁src
-                        └── 📁Resources
-                            ├── 📁app
-                            │   └── 📁storefront
-                            │       └── 📁src
-                            │           └── 📄main.js
-                            └── 📁views
-                </code></pre>
+        <section>
+            <h3>Add JS entry file</h3>
 
-                <ul>
-                    <li>The <code class="inline">main.js</code> is automatically picked up by shopware and creates a script tag in the template.</li>
-                    <li>JS will be bundled webpack.</li>
-                </ul>
-            </section>
+            <pre><code data-trim data-line-numbers="5-8" class="language-txt">
+            shopware-root/custom/plugins/
+            └── 📁SwagFaq
+                └── 📁src
+                    └── 📁Resources
+                        ├── 📁app
+                        │   └── 📁storefront
+                        │       └── 📁src
+                        │           └── 📄main.js
+                        └── 📁views
+            </code></pre>
+
+            <ul>
+                <li>The <code class="inline">main.js</code> is automatically picked up by shopware and creates a script tag in the template.</li>
+                <li>JS will be bundled webpack.</li>
+            </ul>
+        </section>
+
         <section>
             <h2>Add storefront JS plugin</h2>
 
