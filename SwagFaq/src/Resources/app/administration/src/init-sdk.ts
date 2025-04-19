@@ -30,7 +30,7 @@ import { LOCATION_CARD_LIST, LOCATION_CMS_ELEMENT } from './constants';
         name: LOCATION_CMS_ELEMENT,
         label: 'swagFaq.cms.elementLabel',
         defaultConfig: {
-            faqContent: {
+            exampleConfig: {
                 source: 'static',
                 value: '',
             },
