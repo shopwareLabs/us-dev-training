@@ -13,18 +13,6 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="SwagFaq\Storefront\Controller\FaqController" public="true">
-            <argument type="service" id="SwagFaq\Core\Content\Route\FaqSubmitRoute"/>
-
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
-        <service id="SwagFaq\Core\Content\Route\FaqSubmitRoute">
-            <argument type="service" id="swag_faq_entry.repository"/>
-        </service>
-
         <service id="SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryEntity">
             <tag name="shopware.entity"/>
         </service>
