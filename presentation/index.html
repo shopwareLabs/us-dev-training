@@ -686,7 +686,7 @@
 
             <pre><code data-trim class="language_bash">
                 # Clone repository from github
-                git clone git@github.com:shopwareLabs/us-dev-training.git -b task-one
+                git clone git@github.com:shopwareLabs/us-dev-training.git -b task-command
 
                 # Create a symlink to your shopware plugins directory
                 ln -s /absolute/path/to/us-dev-training/SwagFaq/
@@ -1829,6 +1829,18 @@ class ProductPageCriteriaSubscriber implements EventSubscriberInterface
 
         <section>
             <h1>Some best practices</h1>
+            <h3>Core (backend)</h3>
+
+            <ul>
+                <li>Do not use internal classes directly</li>
+                <li>Use the repositories instead of plain SQL queries</li>
+                <li>For new routes consider adding a store API route so headless shops can use it</li>
+                <li>Proactively check your extensions with the next major feature flag enabled</li>
+                <li>Write unit/integration tests using our base classes</li>
+                <li>You can use our core PHPStan rules to check your code</li>
+            </ul>
+
+            <a href="https://developer.shopware.com/docs/resources/guidelines/">Guidelines</a>
         </section>
 
         <section>
