@@ -6,25 +6,6 @@
 
     <services>
 
-        <service id="SwagFaq\Command\DemoDataCommand">
-            <argument type="service" id="product.repository"/>
-            <argument type="service" id="swag_faq_entry.repository"/>
-
-            <tag name="console.command"/>
-        </service>
-
-        <service id="SwagFaq\Storefront\Controller\FaqController" public="true">
-            <argument type="service" id="SwagFaq\Core\Content\Route\FaqSubmitRoute"/>
-
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
-        <service id="SwagFaq\Core\Content\Route\FaqSubmitRoute">
-            <argument type="service" id="swag_faq_entry.repository"/>
-        </service>
-
         <service id="SwagFaq\Core\Content\SwagFaqEntry\SwagFaqEntryEntity">
             <tag name="shopware.entity"/>
         </service>
@@ -33,12 +14,5 @@
             <tag name="shopware.entity.extension"/>
         </service>
 
-        <service id="SwagFaq\Storefront\Page\Product\Subscriber\ProductPageCriteriaSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service id="SwagFaq\DataResolver\FaqCmsElementDataResolver">
-            <tag name="shopware.cms.data_resolver" />
-        </service>
     </services>
 </container>
