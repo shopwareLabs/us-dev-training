@@ -1077,10 +1077,21 @@ console.log(products);
         </section>
 
         <section>
+            <h2>Development setup</h2>
+            <ul>
+                <li>Checkout branch <code class="inline">task-admin</code></li>
+                <li>Go into <code class="inline">custom/plugins/SwagFaq/src/Resources/app/administration</code></li>
+                <li>Run <code class="inline">npm install</code></li>
+                <li>Go back into shopware directory</li>
+                <li>Start the "watcher" with <code class="inline">composer run watch:admin</code></li>
+                <li>Start changing code</li>
+            </ul>
+        </section>
+
+        <section>
             <h2>Hands on</h2>
             <small>Try it yourself</small>
             <ul>
-                <li>Checkout branch <code class="inline">task-admin</code></li>
                 <li>Add tab + card to product detail page</li>
                 <li>Get the product <code class="inline">id</code> and <code class="inline">versionId</code> of the detail page</li>
                 <li>Query the <code class="inline">swag_faq_entry</code> repository</li>
@@ -1820,6 +1831,7 @@ class ProductPageCriteriaSubscriber implements EventSubscriberInterface
             <h3>Users create FAQ entries</h3>
 
             <ul>
+                <li>checkout branch <code class="inline">task-route</code></li>
                 <li>create Store API route to create FAQ entry</li>
                 <li>create storefront controller to expose the new route</li>
                 <li>create a form in the FAQ CMS element to submit new entry</li>
