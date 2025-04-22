@@ -1106,13 +1106,6 @@ console.log(products);
             </small>
         </section>
 
-        <!-- Todo Admin:
-        - main branch is our finished solution
-        - prepare task-admin branch
-
-        - further slides for our (complex) solution?
-        -->
-
         <section>
             <h1>Storefront</h1>
         </section>
@@ -1152,158 +1145,154 @@ console.log(products);
             <h2>Extend a template</h2>
         </section>
 
-<!--        <section>-->
-            <section>
-                <h3>Find the core template</h3>
-                <pre><code data-trim class="language-txt no-line-numbers" data-line-numbers="1-9|6">
-                shopware-root/src/Storefront/Resources/
-                └── 📁views/
-                    └── 📁storefront/
-                        └── 📁element/
-                            ├── ...
-                            ├── 🌱cms-element-product-description-reviews.html.twig <--
-                            ├── 🌱cms-element-product-listing.html.twig
-                            ├── 🌱cms-element-product-name.html.twig
-                            └── ...
-                </code></pre>
-            </section>
+        <section>
+            <h3>Find the core template</h3>
+            <pre><code data-trim class="language-txt no-line-numbers" data-line-numbers="1-9|6">
+            shopware-root/src/Storefront/Resources/
+            └── 📁views/
+                └── 📁storefront/
+                    └── 📁element/
+                        ├── ...
+                        ├── 🌱cms-element-product-description-reviews.html.twig <--
+                        ├── 🌱cms-element-product-listing.html.twig
+                        ├── 🌱cms-element-product-name.html.twig
+                        └── ...
+            </code></pre>
+        </section>
 
-            <section>
-                <h3>Add your template</h3>
-                <pre><code data-trim class="language-txt">
-                shopware-root/custom/plugins/SwagFaq/src/Resources/
-                └── 📁views
-                    └── 📁storefront
-                        └── 📁element
-                            └── 🌱cms-element-product-description-reviews.html.twig <--
+        <section>
+            <h3>Add your template</h3>
+            <pre><code data-trim class="language-txt">
+            shopware-root/custom/plugins/SwagFaq/src/Resources/
+            └── 📁views
+                └── 📁storefront
+                    └── 📁element
+                        └── 🌱cms-element-product-description-reviews.html.twig <--
 
-                </code></pre>
-                <ul>
-                    <li>Structure from <code class="inline">/Resources/</code> needs to be the same.</li>
-                    <li>Creating the same file results in an override.</li>
-                </ul>
-            </section>
-<!--        </section>-->
+            </code></pre>
+            <ul>
+                <li>Structure from <code class="inline">/Resources/</code> needs to be the same.</li>
+                <li>Creating the same file results in an override.</li>
+            </ul>
+        </section>
 
-<!--        <section>-->
-            <section>
-                <h3>Find block in core template</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="0|15"><script type="text/template">
+        <section>
+            <h3>Find block in core template</h3>
+            <pre><code data-trim class="language-twig" data-line-numbers="0|15"><script type="text/template">
 {# src/Storefront/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
 {% if element.data.product %}
-    <div class="product-detail-tabs cms-element-{{ element.type }}{% if config.alignment.value %} has-vertical-alignment{% endif %}">
-        <div class="card card-tabs">
-            {% block element_product_description_reviews_tabs_navigation %}
-                <div class="cms-card-header card-header product-detail-tab-navigation product-description-reviews-tab-navigation">
-                    {% block element_product_description_reviews_tabs_navigation_container %}
-                        <ul class="nav nav-tabs product-detail-tab-navigation-list"
-                            id="product-detail-tabs"
-                            role="tablist">
-                            {% block element_product_description_reviews_tabs_navigation_description %}
-                                {# ... #}
-                            {% endblock %}
+<div class="product-detail-tabs cms-element-{{ element.type }}{% if config.alignment.value %} has-vertical-alignment{% endif %}">
+    <div class="card card-tabs">
+        {% block element_product_description_reviews_tabs_navigation %}
+            <div class="cms-card-header card-header product-detail-tab-navigation product-description-reviews-tab-navigation">
+                {% block element_product_description_reviews_tabs_navigation_container %}
+                    <ul class="nav nav-tabs product-detail-tab-navigation-list"
+                        id="product-detail-tabs"
+                        role="tablist">
+                        {% block element_product_description_reviews_tabs_navigation_description %}
+                            {# ... #}
+                        {% endblock %}
 
-                            {% block element_product_description_reviews_tabs_navigation_review %}
-                                {% if config('core.listing.showReview') %}
-                                    <li class="nav-item">
-                                        <a class="nav-link {% if (ratingSuccess == 1) or (ratingSuccess == -1) %}active{% endif %} product-detail-tab-navigation-link review-tab"
-                                           id="{{ reviewTabId }}"
-                                           data-bs-toggle="tab"
-                                           data-off-canvas-tabs="true"
-                                           href="{{ reviewTabHref }}"
-                                           role="tab"
-                                           aria-controls="{{ reviewTabContent }}"
-                                           aria-selected="true">
-                                            {{ "detail.tabsReview"|trans|sw_sanitize }}
-                                            <span class="product-detail-tab-navigation-icon">
-                                                {% sw_icon 'arrow-medium-right' style {'pack':'solid'} %}
-                                            </span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% endblock %}
-                        </ul>
-                    {% endblock %}
-                </div>
-            {% endblock %}
+                        {% block element_product_description_reviews_tabs_navigation_review %}
+                            {% if config('core.listing.showReview') %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if (ratingSuccess == 1) or (ratingSuccess == -1) %}active{% endif %} product-detail-tab-navigation-link review-tab"
+                                       id="{{ reviewTabId }}"
+                                       data-bs-toggle="tab"
+                                       data-off-canvas-tabs="true"
+                                       href="{{ reviewTabHref }}"
+                                       role="tab"
+                                       aria-controls="{{ reviewTabContent }}"
+                                       aria-selected="true">
+                                        {{ "detail.tabsReview"|trans|sw_sanitize }}
+                                        <span class="product-detail-tab-navigation-icon">
+                                            {% sw_icon 'arrow-medium-right' style {'pack':'solid'} %}
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endblock %}
+                    </ul>
+                {% endblock %}
+            </div>
+        {% endblock %}
 
-            {% block element_product_description_reviews_tabs_content %}
-                <div class="product-detail-tabs-content card-body">
-                    {% block element_product_description_reviews_tabs_content_container %}
-                        <div class="tab-content">
-                            {% block element_product_description_reviews_tabs_content_description %}
-                                {# ... #}
-                            {% endblock %}
+        {% block element_product_description_reviews_tabs_content %}
+            <div class="product-detail-tabs-content card-body">
+                {% block element_product_description_reviews_tabs_content_container %}
+                    <div class="tab-content">
+                        {% block element_product_description_reviews_tabs_content_description %}
+                            {# ... #}
+                        {% endblock %}
 
-                            {% block element_product_description_reviews_tabs_content_review %}
-                                {# ... #}
-                            {% endblock %}
-                        </div>
-                    {% endblock %}
-                </div>
-            {% endblock %}
-        </div>
+                        {% block element_product_description_reviews_tabs_content_review %}
+                            {# ... #}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
     </div>
+</div>
 {% endif %}
 
 
-                </script></code></pre>
-            </section>
+            </script></code></pre>
+        </section>
 
-            <section>
-                <h3>Extend block in your template</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="2|4-13"><script type="text/template">
-                {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
-                {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
+        <section>
+            <h3>Extend block in your template</h3>
+            <pre><code data-trim class="language-twig" data-line-numbers="2|4-13"><script type="text/template">
+            {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+            {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
 
-                {% block element_product_description_reviews_tabs_navigation_review %}
-                    <li class="nav-item">
-                        <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
-                           data-bs-toggle="tab"
-                           href="#"
-                           role="tab">
-                            My own tab
-                        </a>
-                    </li>
-                {% endblock %}
-                </script></code></pre>
+            {% block element_product_description_reviews_tabs_navigation_review %}
+                <li class="nav-item">
+                    <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
+                       data-bs-toggle="tab"
+                       href="#"
+                       role="tab">
+                        My own tab
+                    </a>
+                </li>
+            {% endblock %}
+            </script></code></pre>
 
-                <ul>
-                    <li><code class="inline">sw_extends</code> makes all blocks of the extended template available.</li>
-                    <li><code class="inline">sw_extends</code> enables multi-inheritance.</li>
-                </ul>
-            </section>
+            <ul>
+                <li><code class="inline">sw_extends</code> makes all blocks of the extended template available.</li>
+                <li><code class="inline">sw_extends</code> enables multi-inheritance.</li>
+            </ul>
+        </section>
 
-            <section>
-                <img src="img/block-override.png">
-            </section>
+        <section>
+            <img src="img/block-override.png">
+        </section>
 
-            <section>
-                <h3>Parent call</h3>
-                <pre><code data-trim class="language-twig" data-line-numbers="5"><script type="text/template">
-                {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
-                {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
+        <section>
+            <h3>Parent call</h3>
+            <pre><code data-trim class="language-twig" data-line-numbers="5"><script type="text/template">
+            {# SwagFaq/src/Resources/views/storefront/element/cms-element-product-description-reviews.html.twig #}
+            {% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
 
-                {% block element_product_description_reviews_tabs_navigation_review %}
-                    {{ parent() }}
-                    <li class="nav-item">
-                        <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
-                           data-bs-toggle="tab"
-                           href="#"
-                           role="tab">
-                            My own tab
-                        </a>
-                    </li>
-                {% endblock %}
-                </script></code></pre>
+            {% block element_product_description_reviews_tabs_navigation_review %}
+                {{ parent() }}
+                <li class="nav-item">
+                    <a class="nav-link product-detail-tab-navigation-link swag-faq-tab"
+                       data-bs-toggle="tab"
+                       href="#"
+                       role="tab">
+                        My own tab
+                    </a>
+                </li>
+            {% endblock %}
+            </script></code></pre>
 
-                <p>The <code class="inline">parent()</code> call returns the HTML content of the core block.</p>
-            </section>
+            <p>The <code class="inline">parent()</code> call returns the HTML content of the core block.</p>
+        </section>
 
-            <section>
-                <img src="img/parent-call.png">
-            </section>
-<!--        </section>-->
+        <section>
+            <img src="img/parent-call.png">
+        </section>
 
         <section>
             <h2>Add data to the Storefront</h2>
@@ -1642,14 +1631,6 @@ class ProductPageCriteriaSubscriber implements EventSubscriberInterface
                     <template data-example-plugin data-example-plugin-options='{{ examplePluginOptions|json_encode }}'></template>
                 {% endblock %}
             </script></code></pre>
-        </section>
-<!--        </section>-->
-
-        <section>
-            <h2>Possible tasks</h2>
-            <p>Add the Bootstrap carousel?</p>
-            <p>Add the complete CMS element?</p>
-            <p>Add custom CSS to </p>
         </section>
 
         <section>
