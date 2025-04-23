@@ -715,6 +715,21 @@
         </section>
 
         <section>
+            <h1>Some best practices</h1>
+            <h3>Core (backend)</h3>
+
+            <ul>
+                <li>Do not use internal classes directly</li>
+                <li>Use the repositories instead of plain SQL queries</li>
+                <li>Proactively check your extensions with the next major feature flag enabled</li>
+                <li>Write unit/integration tests using our base classes</li>
+                <li>You can use our core PHPStan rules to check your code</li>
+            </ul>
+
+            <a href="https://developer.shopware.com/docs/resources/guidelines/">Guidelines</a>
+        </section>
+
+        <section>
             <h1>Administration</h1>
             <img src="img/AdministrationDashboard.png" height="500px" alt="">
         </section>
@@ -1109,6 +1124,19 @@ console.log(products);
             <small>
                 <a href="https://github.com/shopwareLabs/us-dev-training/tree/main">Our complete admin solution</a>
             </small>
+        </section>
+
+        <section>
+            <h2>Some best practices</h2>
+            <h3>Administration</h3>
+
+            <ul>
+                <li>Prefer AdminSDK over <code class="inline">Component.extend</code> or <code class="inline">Component.override</code></li>
+                <li>Prefer Meteor components over others for consistent UI/UX</li>
+                <li>Prefer using TypeScript instead of JavaScript</li>
+                <li>Write automated tests (recommended Unit: Jest + Acceptance: Playwright)</li>
+                <li>Let them run in CI pipelines against multiple Shopware versions</li>
+            </ul>
         </section>
 
         <section>
@@ -1823,35 +1851,6 @@ class ProductPageCriteriaSubscriber implements EventSubscriberInterface
                 <li>create storefront controller to expose the new route</li>
                 <li>create a form in the FAQ CMS element to submit new entry</li>
                 <li>optional: submit form via AJAX by creating a storefront JS plugin</li>
-            </ul>
-        </section>
-
-        <section>
-            <h1>Some best practices</h1>
-            <h3>Core (backend)</h3>
-
-            <ul>
-                <li>Do not use internal classes directly</li>
-                <li>Use the repositories instead of plain SQL queries</li>
-                <li>For new routes consider adding a store API route so headless shops can use it</li>
-                <li>Proactively check your extensions with the next major feature flag enabled</li>
-                <li>Write unit/integration tests using our base classes</li>
-                <li>You can use our core PHPStan rules to check your code</li>
-            </ul>
-
-            <a href="https://developer.shopware.com/docs/resources/guidelines/">Guidelines</a>
-        </section>
-
-        <section>
-            <h2>Some best practices</h2>
-            <h3>Administration</h3>
-
-            <ul>
-                <li>Prefer AdminSDK over <code class="inline">Component.extend</code> or <code class="inline">Component.override</code></li>
-                <li>Prefer Meteor components over others for consistent UI/UX</li>
-                <li>Prefer using TypeScript instead of JavaScript</li>
-                <li>Write automated tests (recommended Unit: Jest + Acceptance: Playwright)</li>
-                <li>Let them run in CI pipelines against multiple Shopware versions</li>
             </ul>
         </section>
 
