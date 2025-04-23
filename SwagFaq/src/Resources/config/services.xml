@@ -33,10 +33,6 @@
             <tag name="shopware.entity.extension"/>
         </service>
 
-        <service id="SwagFaq\Storefront\Page\Product\Subscriber\ProductPageCriteriaSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
         <service id="SwagFaq\DataResolver\FaqCmsElementDataResolver">
             <tag name="shopware.cms.data_resolver" />
         </service>
