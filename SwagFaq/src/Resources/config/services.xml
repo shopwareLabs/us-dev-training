@@ -13,10 +13,6 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="SwagFaq\Subscriber\MySubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
         <service id="SwagFaq\Storefront\Controller\FaqController" public="true">
             <argument type="service" id="SwagFaq\Core\Content\Route\FaqSubmitRoute"/>
 
